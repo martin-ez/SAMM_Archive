@@ -16,8 +16,13 @@ class App extends Component {
         progression: ["I", "V", "vi", "IV"],
         band: "Blue Eagle",
         drums: {
-          kick: "x---x---x---x---",
-          snare: "x---x-x-x---x-x-"
+          user: "BlaBla",
+          pattern: [
+            "x---x---x---x---",
+            "x---x-x-x---x-x-",
+            "----------------",
+            "----------------"
+          ]
         }
       }
     }
@@ -26,7 +31,6 @@ class App extends Component {
   render() {
     return (
       <div className="container">
-        <h1>Hey!!</h1>
         <Room song={this.state.song}/>
       </div>
     );
