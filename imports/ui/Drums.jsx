@@ -24,7 +24,7 @@ class Drums extends Component {
   RenderLabels() {
     var labels = ["","Kick", "Snare", "Hihat", "Other"];
     return labels.map((l, i) => {
-      if(i==0) return <div className="empty"></div>;
+      if(i==0) return <div key={i} className="empty"></div>;
       return <div key={i} className="label"><h1>{l}</h1></div>
     });
   }

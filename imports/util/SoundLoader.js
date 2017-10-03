@@ -7,7 +7,7 @@ SoundLoader.prototype.loadDrumsBuffer = function(url) {
   var DrumSounds = require('../engines/sounds/AcousticDrumsSounds.js');
   var Binary64Binary = require('./base64-binary.js');
   var sources = [];
-  sources.push(DrumSounds.default.kick);
+  sources.push(DrumSounds.default.kick); 
   sources.push(DrumSounds.default.snare);
   sources.push(DrumSounds.default.hihat_close);
   sources.push(DrumSounds.default.hihat_open);

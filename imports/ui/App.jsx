@@ -32,10 +32,8 @@ class App extends Component {
 
   render() {
     return (
-
       <div className="container">
         <Room song={this.state.song} update={(s) => this.UpdateSong(s)}/>
-
       </div>
     );
   }
