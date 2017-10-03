@@ -22,15 +22,24 @@ class Drums extends Component {
 
   RenderPads(pattern) {
     return pattern.map((v,i) => {
-      return v.split('').map((hit, j) => {
-        return <div key={i+':'+j} className={"pad "+(hit==='x'?"active":"")}></div>;
+      return v.map((hit, j) => {
+        return <div key={i+':'+j}
+          className={"pad "+(hit==='x'?"active":"")}
+          onClick={() => this.UpdatePattern(i, j)}></div>;
       });
     });
+  }
+
+  UpdatePattern(i, j) {
+    let oldHit = this.props.drums.pattern[i][j];
+    let newHit = oldHit==='x' ? '-':'x';
+    this.props.update(newHit, i, j);
   }
 }
 
 Drums.propTypes = {
   drums: PropTypes.object.isRequired,
-  beat: PropTypes.number.isRequired
+  beat: PropTypes.number.isRequired,
+  update: PropTypes.func.isRequired
 };
 export default Drums;

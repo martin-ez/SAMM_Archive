@@ -18,10 +18,10 @@ class App extends Component {
         drums: {
           user: "BlaBla",
           pattern: [
-            "x---x---x---x---",
-            "x---x-x-x---x-x-",
-            "----------------",
-            "----------------"
+            ['-','-','-','-','-','-','-','-','-','-','-','-','-','-','-','-'],
+            ['-','-','-','-','-','-','-','-','-','-','-','-','-','-','-','-'],
+            ['-','-','-','-','-','-','-','-','-','-','-','-','-','-','-','-'],
+            ['-','-','-','-','-','-','-','-','-','-','-','-','-','-','-','-']
           ]
         }
       }
@@ -31,9 +31,15 @@ class App extends Component {
   render() {
     return (
       <div className="container">
-        <Room song={this.state.song}/>
+        <Room song={this.state.song} update={(s) => this.UpdateSong(s)}/>
       </div>
     );
+  }
+
+  UpdateSong(s) {
+    this.setState({
+      song: s
+    });
   }
 }
 
