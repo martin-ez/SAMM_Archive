@@ -1,6 +1,8 @@
 import React, {Component} from 'react';
 import PropTypes from 'prop-types';
 import {createContainer} from 'meteor/react-meteor-data';
+import Slider from './Slider.jsx'
+
 
 import Room from './Room.jsx';
 
@@ -30,8 +32,10 @@ class App extends Component {
 
   render() {
     return (
+
       <div className="container">
         <Room song={this.state.song} update={(s) => this.UpdateSong(s)}/>
+
       </div>
     );
   }
