@@ -1,10 +1,38 @@
-.drums
+.drumsComponent
+{
+  height: 60vh;
+  width: 100vw;
+  display: grid;
+  grid-template-columns: 5vw 80vw 15vw;
+  grid-gap: 0.5vw;
+}
+
+.drumPad
 {
   display: grid;
-  grid-template-columns: repeat(16, 5vw);
-  grid-template-rows: 1vw repeat(4, 5vw);
+  grid-template-columns: repeat(16, 1fr);
+  grid-template-rows: 0.75vw repeat(4, 0.5fr);
   grid-gap: 0.5vw;
-  padding: 20px;
+  padding: 0.5vw;
+}
+
+.labels
+{
+  display: grid;
+  grid-template-rows: 0.75vw repeat(4, 0.5fr);
+  grid-gap: 0.5vw;
+  padding: 0.5vw;
+}
+
+.label
+{
+  width: 10vw;
+  position: relative;
+  left: -5.5vw;
+  color: #FFF;
+  font-size: 0.8rem;
+  background-color: #181818;
+  border-radius: 15%;
 }
 
 .pad
