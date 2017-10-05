@@ -7,13 +7,13 @@ export default class Visualizer {
     javascriptNode.connect(context.destination);
     analyser.connect(javascriptNode);
 
-    var ligth = this.ColorLuminance(color, 0.50);
-    var dark = this.ColorLuminance(color, -0.50);
+    var step1 = this.ColorLuminance(color, -0.25);
+    var step2 = this.ColorLuminance(step1, -0.25);
     var gradient = ctx.createLinearGradient(0, 0, 0, 300);
     gradient.addColorStop(1, '#000000');
-    gradient.addColorStop(0.25, ligth);
-    gradient.addColorStop(0.50, color);
-    gradient.addColorStop(0.75, dark);
+    gradient.addColorStop(0.25, color);
+    gradient.addColorStop(0.50, step1);
+    gradient.addColorStop(0.75, step2);
     gradient.addColorStop(0, '#ffffff');
 
     javascriptNode.onaudioprocess = function() {

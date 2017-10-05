@@ -14,41 +14,82 @@ export default class Song {
         sources: [],
         gains: [],
         masterGain: null,
-        analyser: null
+        analyser: null,
+        ready: false
+      };
+      this.bass = {
+        buffers: [],
+        sources: [],
+        masterGain: null,
+        analyser: null,
+        ready: false
+      };
+      this.keys = {
+        buffers: [],
+        sources: [],
+        masterGain: null,
+        analyser: null,
+        ready: false
+      };
+      this.solo = {
+        buffers: [],
+        sources: [],
+        masterGain: null,
+        analyser: null,
+        ready: false
       };
       this.ready = false;
-      this.LoadDrumSounds();
+      let soundLoader = new SoundLoader(this.context);
+      soundLoader.loadDrumsBuffer((b) => this.FinishedLoadingDrums(b));
+      soundLoader.loadBassBuffer((b) => this.FinishedLoadingBass(b));
     }
     this.song = newSong;
     return songInstance;
   }
 
-  LoadDrumSounds() {
-    let soundLoader = new SoundLoader(this.context, (b) => this.FinishedLoading(b));
-    soundLoader.loadDrumsBuffer();
-  }
-
-  FinishedLoading(bufferList) {
+  FinishedLoadingDrums(bufferList) {
     this.drums.buffers = bufferList;
     this.drums.masterGain = this.context.createGain().connect(this.context.destination);
     for (var i = 0; i < 4; i++) {
       this.drums.gains[i] = this.context.createGain().connect(this.drums.masterGain);
     }
-    this.ready = true;
+    if(this.drums.buffers.length != 0) {
+      this.drums.ready = true;
+    }
+  }
+
+  FinishedLoadingBass(bufferList) {
+    this.bass.buffers = bufferList;
+    this.bass.masterGain = this.context.createGain().connect(this.context.destination);
+    if(this.drums.buffers.length != 0) {
+      this.bass.ready = true;
+    }
   }
 
   CreateVisualizer(canvas, instrument) {
     var v = new Visualizer();
     switch(instrument) {
       case "Drums":
-      var analyser = v.InitializeAnalyser(this.context, canvas, '#3dd617');
+      var analyser = v.InitializeAnalyser(this.context, canvas, '#FE0000');
       if(!this.drums.analyser) this.drums.analyser = analyser;
+      break;
+      case "Bass":
+      var analyser = v.InitializeAnalyser(this.context, canvas, '#011EFE');
+      if(!this.bass.analyser) this.bass.analyser = analyser;
+      break;
+      case "Keys":
+      var analyser = v.InitializeAnalyser(this.context, canvas, '#0BFF01');
+      if(!this.keys.analyser) this.keys.analyser = analyser;
+      break;
+      case "Solo":
+      var analyser = v.InitializeAnalyser(this.context, canvas, '#FE00F6');
+      if(!this.solo.analyser) this.solo.analyser = analyser;
       break;
     }
   }
 
   PlayDrumSound(i) {
-    if (this.ready) {
+    if (this.drums.ready) {
       if (this.drums.sources[i]) {
         this.drums.sources[i].disconnect();
       }
