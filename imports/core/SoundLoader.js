@@ -14,7 +14,7 @@ SoundLoader.prototype.loadDrumsBuffer = function(callback) {
 
   var loader = this;
   var buffers = []
-  sources.map(function(source, index) {
+  sources.map((source, index) => {
     var byteArray = Base64Binary.decodeArrayBuffer(source);
     loader.context.decodeAudioData(byteArray, function(buffer) {
       if(!buffer) {
@@ -22,9 +22,9 @@ SoundLoader.prototype.loadDrumsBuffer = function(callback) {
         return;
       }
       buffers.push(buffer);
+      if(buffers.length == sources.length) callback(buffers);
     });
   });
-  callback(buffers);
 }
 
 SoundLoader.prototype.loadBassBuffer = function(callback) {
@@ -61,9 +61,9 @@ SoundLoader.prototype.loadBassBuffer = function(callback) {
         return;
       }
       buffers.push(buffer);
+      if(buffers.length == sources.length) callback(buffers);
     });
   });
-  callback(buffers);
 }
 
 export default SoundLoader;

@@ -1,7 +1,7 @@
 import React, {Component} from 'react';
 import PropTypes from 'prop-types';
 
-import Song from '../engines/Song.js';
+import Song from '../core/Song.js';
 
 import Visualizer from './Visualizer.jsx';
 import Drums from './Drums.jsx';

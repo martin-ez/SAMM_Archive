@@ -1,6 +1,6 @@
 let songInstance = null;
 
-import SoundLoader from '../util/SoundLoader.js';
+import SoundLoader from './SoundLoader.js';
 import Visualizer from './Visualizer.js';
 
 export default class Song {
@@ -19,7 +19,7 @@ export default class Song {
       };
       this.bass = {
         buffers: [],
-        sources: [],
+        source: null,
         masterGain: null,
         analyser: null,
         ready: false

@@ -2,31 +2,16 @@ import React, {Component} from 'react';
 import PropTypes from 'prop-types';
 import {createContainer} from 'meteor/react-meteor-data';
 import Slider from './Slider.jsx'
-
-
 import Room from './Room.jsx';
 
 // App component - represents the whole app
 class App extends Component {
   constructor(props) {
     super(props);
+    import SongGenerator from '../core/SongGenerator.js';
+    var songGenerator = new SongGenerator();
     this.state = {
-      song: {
-        id: "B62",
-        tempo: 120,
-        key: "A#",
-        progression: ["I", "V", "vi", "IV"],
-        band: "Blue Eagle",
-        drums: {
-          user: "BlaBla",
-          pattern: [
-            ['-','-','-','-','-','-','-','-','-','-','-','-','-','-','-','-'],
-            ['-','-','-','-','-','-','-','-','-','-','-','-','-','-','-','-'],
-            ['-','-','-','-','-','-','-','-','-','-','-','-','-','-','-','-'],
-            ['-','-','-','-','-','-','-','-','-','-','-','-','-','-','-','-']
-          ]
-        }
-      }
+      song: songGenerator.CreateNewSong()
     }
   }
 
