@@ -1,0 +1,26 @@
+.InfoTab
+{
+  position: relative;
+  top: -2vh;
+  right: -2vw;
+  border-radius: 5%;
+  background-color: #CCC;
+  padding: 2vw;
+  box-shadow: 5px 5px 35px;
+}
+
+.InfoTab .Chords
+{
+  display: grid;
+  grid-template-columns: repeat(4, 1fr);
+  grid-gap: 1vw;
+  margin: 1vw;
+}
+
+.InfoTab .chord
+{
+  border-radius: 5%;
+  color: white;
+  background-color: #141414;
+  text-align: center;
+}

@@ -80,7 +80,7 @@ SongGenerator.prototype.CreateBandName = function() {
   "Yellow","YellowGreen"];
   var animals = require('animals');
   var a = animals();
-  return colors[Math.floor(Math.random() * colors.length)] +" "+a.charAt(0).toUpperCase() + a.slice(1);
+  return "The " +colors[Math.floor(Math.random() * colors.length)] +" "+a.charAt(0).toUpperCase() + a.slice(1)+"s";
 }
 
 export default SongGenerator;

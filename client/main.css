@@ -8,5 +8,10 @@
 
 html
 {
-  overflow: hidden;  
+  overflow: hidden;
+}
+
+body
+{
+  background-color: #EEE; 
 }
