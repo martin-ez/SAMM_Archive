@@ -24,3 +24,11 @@
   background-color: #141414;
   text-align: center;
 }
+
+.InfoTab .chord.active
+{
+  border-radius: 5%;
+  color: #141414;
+  background-color: #EEE;
+  text-align: center;
+}

@@ -19,7 +19,7 @@ class Info extends Component {
 
   PrintChordProgression() {
     return this.props.song.progression.map((chord, i) => {
-      return <div key={i} className="chord"><h2>{this.NumberToChord(chord)}</h2></div>;
+      return <div key={i} className={"chord"+(this.props.bar===i?" active":"")}><h2>{this.NumberToChord(chord)}</h2></div>;
     });
   }
 

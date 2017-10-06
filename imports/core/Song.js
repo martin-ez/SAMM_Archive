@@ -1,6 +1,6 @@
 let songInstance = null;
 import { MonoSynth } from 'synth-kit';
-import { Ocatvian } from 'octavian';
+import { Octavian, Note } from 'octavian';
 import SoundLoader from './SoundLoader.js';
 import Visualizer from './Visualizer.js';
 
@@ -48,30 +48,24 @@ export default class Song {
   }
 
   LoadBassSynth() {
-    /*this.bass.synth = MonoSynth(this.context).connect(true);
-    this.bass.synth.amp.gain = 0.5;*/
     this.bass.synth = require('./BassSynth.js')(this.context);
-    this.bass.masterGain = this.context.createGain().connect(this.context.destination);
-    this.bass.synth .connect(this.bass.masterGain)
+    this.bass.masterGain = this.context.createGain();
+    this.bass.masterGain.connect(this.context.destination);
+    this.bass.synth.connect(this.bass.masterGain);
+    this.bass.masterGain.gain.value = 3;
     this.bass.ready = true;
   }
 
   FinishedLoadingDrums(bufferList) {
     this.drums.buffers = bufferList;
-    this.drums.masterGain = this.context.createGain().connect(this.context.destination);
+    this.drums.masterGain = this.context.createGain();
+    this.drums.masterGain.connect(this.context.destination);
     for (var i = 0; i < 4; i++) {
-      this.drums.gains[i] = this.context.createGain().connect(this.drums.masterGain);
+      this.drums.gains[i] = this.context.createGain();
+      this.drums.gains[i].connect(this.drums.masterGain);
     }
     if(this.drums.buffers.length != 0) {
       this.drums.ready = true;
-    }
-  }
-
-  FinishedLoadingBass(bufferList) {
-    this.bass.buffers = bufferList;
-    this.bass.masterGain = this.context.createGain().connect(this.context.destination);
-    if(this.drums.buffers.length != 0) {
-      this.bass.ready = true;
     }
   }
 
@@ -111,8 +105,135 @@ export default class Song {
   }
 
   PlayBassSound(h, bar) {
+    var rootStr = this.song.key+"4";
+    var note = new Note(rootStr);
+    note = this.GetNoteBar(note, bar);
+    note = this.GetNoteInterval(note, h);
+    var noteName = note.letter+(note.modifier===null?"":note.modifier);
+    var midi = this.NoteToMIDI(noteName, note.octave);
     var s = 60 / (this.song.tempo*8);
-    //this.bass.synth.update({midiNote: 60, attack: 0.01, decay: s, sustain: s, release: s*0.1, peak: 0.5, mid: 0.3, end: 0.00001, detune: 7});
-    //this.bass.synth.start(this.context.currentTime);
+    this.bass.synth.update({midiNote: midi, attack: 0, decay: 0, sustain: s, release: s*0.1, peak: 0.5, mid: 0.3, end: 0.00001, detune: 0});
+    this.bass.synth.start(this.context.currentTime);
+  }
+
+  GetNoteBar(rootNote, bar) {
+    var note = rootNote;
+    var minor = this.song.progression[0] < 0;
+    var chord = Math.abs(this.song.progression[bar]);
+    switch(chord) {
+      case 2:
+      note = note.majorSecond();
+      break;
+      case 3:
+      if(!minor) {
+        note = note.majorThird();
+      } else {
+        note = note.minorThird();
+      }
+      break;
+      case 4:
+      note = note.perfectFourth();
+      break;
+      case 5:
+      note = note.perfectFifth();
+      break;
+      case 6:
+      if(!minor) {
+        note = note.majorSixth();
+      } else {
+        note = note.minorSixth();
+      }
+      break;
+      case 7:
+      if(!minor) {
+        note = note.majorSeventh();
+      } else {
+        note = note.minorSeventh();
+      }
+      break;
+    }
+    return note;
+  }
+
+  GetNoteInterval(note, interval) {
+    if(interval === 0.5) {
+      return note;
+    }
+    var minor = this.song.progression[0] < 0;
+    switch(interval) {
+      case 0:
+      note = note.downOctave();
+      break;
+      case 0.1:
+      if(!minor) {
+        note = note.majorSecond().downOctave();
+      } else {
+        note = note.minorThird().downOctave();
+      }
+      break;
+      case 0.2:
+      if(!minor) {
+        note = note.majorThird().downOctave();
+      } else {
+        note = note.perfectFourth().downOctave();
+      }
+      break;
+      case 0.3:
+      note = note.perfectFifth().downOctave();
+      break;
+      case 0.4:
+      if(!minor) {
+        note = note.majorSixth().downOctave();
+      } else {
+        note = note.minorSeventh().downOctave();
+      }
+      break;
+      case 0.6:
+      if(!minor) {
+        note = note.majorSecond();
+      } else {
+        note = note.minorThird();
+      }
+      break;
+      case 0.7:
+      if(!minor) {
+        note = note.majorThird();
+      } else {
+        note = note.perfectFourth();
+      }
+      break;
+      case 0.8:
+      note = note.perfectFifth();
+      break;
+      case 0.9:
+      if(!minor) {
+        note = note.majorSixth();
+      } else {
+        note = note.minorSeventh();
+      }
+      break;
+      case 1:
+      note = note.perfectOctave();
+      break;
+    }
+    return note;
+  }
+
+  NoteToMIDI(note, octave) {
+    var notes = {
+      "C": 0,
+      "C#": 1,
+      "D": 2,
+      "D#": 3,
+      "E": 4,
+      "F": 5,
+      "F#": 6,
+      "G": 7,
+      "G#": 8,
+      "A": 9,
+      "A#": 10,
+      "B": 11
+    };
+    return (octave * 12) + notes[note];
   }
 }
