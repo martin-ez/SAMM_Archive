@@ -8,7 +8,7 @@ import Info from './Info.jsx';
 import Drums from './Drums.jsx';
 import Bass from './Bass.jsx';
 
-import './css/RommStyle.css';
+import './css/RoomStyle.css';
 
 class Room extends Component {
   constructor(props) {
@@ -35,16 +35,24 @@ class Room extends Component {
       if (currentBeat === 16) {
         currentBeat = 0;
         currentBar++;
-        if (currentBar === 4)
+        if (currentBar === 4){
           currentBar = 0;
         }
-      for (var i = 0; i < this.props.song.drums.pattern.length; i++) {
-        if (this.props.song.drums.pattern[i][currentBeat] === 'x') {
-          this.state.song.PlayDrumSound(i);
-        }
       }
+      this.PlaySounds(currentBeat, currentBar);
       this.setState({beat: currentBeat, bar: currentBar});
     }, tInterval);
+  }
+
+  PlaySounds(currentBeat, currentBar) {
+    for (var i = 0; i < this.props.song.drums.pattern.length; i++) {
+      if (this.props.song.drums.pattern[i][currentBeat] === 'x') {
+        this.state.song.PlayDrumSound(i);
+      }
+    }
+    if(this.props.song.bass.pattern[currentBeat] !== '-') {
+      this.state.song.PlayBassSound(this.props.song.bass.pattern[currentBeat], currentBar, this.props.song.bass.sound);
+    }
   }
 
   componentWillUnmount() {
@@ -58,7 +66,7 @@ class Room extends Component {
 
   render() {
     if (this.state.instrument === "") {
-      
+
     } else if (this.state.instrument === "Drums") {
       return (
         <div id="Room">
@@ -66,14 +74,14 @@ class Room extends Component {
           <Visualizer instrument="Drums" create={(c, i) => this.CreateVisualizer(c, i)} width={this.state.width / 4} height={this.state.height * 0.35}/>
           <Visualizer instrument="Drums" create={(c, i) => this.CreateVisualizer(c, i)} width={this.state.width / 4} height={this.state.height * 0.35}/>
           <Info song={this.props.song} bar={this.state.bar}/>
-          <Drums drums={this.props.song.drums} beat={this.state.beat} update={(h, i, j) => this.UpdateDrumPattern(h, i, j)}/>
+          <Drums drums={this.props.song.drums} beat={this.state.beat} update={(h, i, j) => this.UpdateDrumPattern(h, i, j)} height={this.state.height * 0.65}/>
         </div>
       );
     } else if (this.state.instrument === "Bass") {
       return (
         <div id="Room">
           <Visualizer instrument="Drums" create={(c, i) => this.CreateVisualizer(c, i)} width={this.state.width / 4} height={this.state.height * 0.35}/>
-          <Visualizer instrument="Drums" create={(c, i) => this.CreateVisualizer(c, i)} width={this.state.width / 4} height={this.state.height * 0.35}/>
+          <Visualizer instrument="Bass" create={(c, i) => this.CreateVisualizer(c, i)} width={this.state.width / 4} height={this.state.height * 0.35}/>
           <Visualizer instrument="Drums" create={(c, i) => this.CreateVisualizer(c, i)} width={this.state.width / 4} height={this.state.height * 0.35}/>
           <Info song={this.props.song} bar={this.state.bar}/>
           <Bass bass={this.props.song.bass} beat={this.state.beat} update={(v, i) => this.UpdateBassPattern(v, i)}/>
@@ -92,7 +100,11 @@ class Room extends Component {
     this.props.update(song);
   }
 
-  UpdateBassPattern(value, i) {}
+  UpdateBassPattern(newBass) {
+    let song = this.props.song;
+    song.bass = newBass;
+    this.props.update(song)
+  }
 }
 
 Room.propTypes = {

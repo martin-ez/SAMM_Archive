@@ -28,7 +28,7 @@ SoundLoader.prototype.loadDrumsBuffer = function(callback) {
 }
 
 SoundLoader.prototype.loadBassBuffer = function(callback) {
-  var BassSounds = require('../sounds/BassSounds.js');
+  /*var BassSounds = require('../sounds/BassSounds.js');
   var Binary64Binary = require('./base64-binary.js');
   var sources = [];
   var finish = false;
@@ -63,7 +63,7 @@ SoundLoader.prototype.loadBassBuffer = function(callback) {
       buffers.push(buffer);
       if(buffers.length == sources.length) callback(buffers);
     });
-  });
+  });*/
 }
 
 export default SoundLoader;

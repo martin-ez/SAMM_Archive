@@ -1,7 +1,6 @@
 import React, {Component} from 'react';
 import PropTypes from 'prop-types';
 import {createContainer} from 'meteor/react-meteor-data';
-import Slider from './Slider.jsx'
 import Room from './Room.jsx';
 
 // App component - represents the whole app
