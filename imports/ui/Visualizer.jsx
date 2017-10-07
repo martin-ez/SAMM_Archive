@@ -12,7 +12,7 @@ class Visualizer extends Component {
 
   render() {
     return (
-      <div className="Visualizer">
+      <div className={"Visualizer " +this.props.instrument}>
         <canvas id="Spectrum"
           ref="canvas"
           width={this.props.width}

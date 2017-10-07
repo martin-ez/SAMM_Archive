@@ -45,7 +45,9 @@ class Room extends Component {
   }
 
   PlaySounds(currentBeat, currentBar) {
-    this.state.song.PlayBGSounds(currentBar);
+    if(currentBeat === 0) {
+      this.state.song.PlayBGSounds(currentBar);
+    }
     for (var i = 0; i < this.props.song.drums.pattern.length; i++) {
       if (this.props.song.drums.pattern[i][currentBeat] === 'x') {
         this.state.song.PlayDrumSound(i);
@@ -71,9 +73,9 @@ class Room extends Component {
     } else if (this.state.instrument === "Drums") {
       return (
         <div id="Room">
-          <Visualizer instrument="Drums" create={(c, i) => this.CreateVisualizer(c, i)} width={this.state.width / 4} height={this.state.height * 0.35}/>
-          <Visualizer instrument="Drums" create={(c, i) => this.CreateVisualizer(c, i)} width={this.state.width / 4} height={this.state.height * 0.35}/>
-          <Visualizer instrument="Drums" create={(c, i) => this.CreateVisualizer(c, i)} width={this.state.width / 4} height={this.state.height * 0.35}/>
+          <Visualizer instrument="Bass" create={(c, i) => this.CreateVisualizer(c, i)} width={this.state.width / 4} height={this.state.height * 0.35}/>
+          <Visualizer instrument="Keys" create={(c, i) => this.CreateVisualizer(c, i)} width={this.state.width / 4} height={this.state.height * 0.35}/>
+          <Visualizer instrument="Solo" create={(c, i) => this.CreateVisualizer(c, i)} width={this.state.width / 4} height={this.state.height * 0.35}/>
           <Info song={this.props.song} bar={this.state.bar}/>
           <Drums drums={this.props.song.drums} beat={this.state.beat} update={(h, i, j) => this.UpdateDrumPattern(h, i, j)} height={this.state.height * 0.65}/>
         </div>
@@ -82,8 +84,8 @@ class Room extends Component {
       return (
         <div id="Room">
           <Visualizer instrument="Drums" create={(c, i) => this.CreateVisualizer(c, i)} width={this.state.width / 4} height={this.state.height * 0.35}/>
-          <Visualizer instrument="Bass" create={(c, i) => this.CreateVisualizer(c, i)} width={this.state.width / 4} height={this.state.height * 0.35}/>
-          <Visualizer instrument="Drums" create={(c, i) => this.CreateVisualizer(c, i)} width={this.state.width / 4} height={this.state.height * 0.35}/>
+          <Visualizer instrument="Keys" create={(c, i) => this.CreateVisualizer(c, i)} width={this.state.width / 4} height={this.state.height * 0.35}/>
+          <Visualizer instrument="Solo" create={(c, i) => this.CreateVisualizer(c, i)} width={this.state.width / 4} height={this.state.height * 0.35}/>
           <Info song={this.props.song} bar={this.state.bar}/>
           <Bass bass={this.props.song.bass} beat={this.state.beat} update={(v, i) => this.UpdateBassPattern(v, i)}/>
         </div>
@@ -95,9 +97,9 @@ class Room extends Component {
     this.state.song.CreateVisualizer(canvas, instrument);
   }
 
-  UpdateDrumPattern(hit, i, j) {
+  UpdateDrumPattern(newDrums) {
     let song = this.props.song;
-    song.drums.pattern[i][j] = hit;
+    song.drums = newDrums;
     this.props.update(song);
   }
 
