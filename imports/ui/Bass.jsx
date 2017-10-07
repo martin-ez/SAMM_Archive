@@ -25,7 +25,7 @@ class Bass extends Component {
       return (
         <div key={i} className={"step "+(i==this.props.beat?"active":"")}>
           <div className="slider">
-            <Slider value={value} style={{height: 300}} axis="y" step={0.1} disabled={disable} onChange={(evt, value) => this.UpdateStep(value, i)}/>
+            <Slider value={value} style={{height: 300}} axis="y" step={0.125} disabled={disable} onChange={(evt, value) => this.UpdateStep(value, i)}/>
           </div>
           <div className="toggle">
             <Toggle toggled={!disable} onToggle={(evt, b) => this.ToggleStep(b, i)}/>

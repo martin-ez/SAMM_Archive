@@ -45,6 +45,7 @@ class Room extends Component {
   }
 
   PlaySounds(currentBeat, currentBar) {
+    this.state.song.PlayBGSounds(currentBar);
     for (var i = 0; i < this.props.song.drums.pattern.length; i++) {
       if (this.props.song.drums.pattern[i][currentBeat] === 'x') {
         this.state.song.PlayDrumSound(i);

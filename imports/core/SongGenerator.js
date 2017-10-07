@@ -21,11 +21,11 @@ SongGenerator.prototype.CreateNewSong = function() {
     },
     bass: {
       user: "",
-      pattern: ['-','-','-','-','-','-','-','-','-','-','-','-','-','-','-','-'],
+      pattern: [0.5,0.5,0.5,0.5,0.5,0.5,0.5,0.5,0.5,0.5,0.5,0.5,0.5,0.5,0.5,0.5],
       sound: [0.1, 0.1, 0.1, 0.1]
     }
   };
-  var tempos = [80, 90, 100, 110, 120];
+  var tempos = [75, 80, 85, 90, 95, 100];
   newSong.tempo = tempos[Math.floor(Math.random() * tempos.length)];
   var keys = ['A', 'A#', 'B', 'C', 'C#', 'D', 'D#', 'E', 'F', 'F#', 'G', 'G#'];
   newSong.key = keys[Math.floor(Math.random() * keys.length)];

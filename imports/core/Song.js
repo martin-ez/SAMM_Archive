@@ -1,5 +1,5 @@
 let songInstance = null;
-import { MonoSynth } from 'synth-kit';
+import { MonoSynth } from 'synth-kit'
 import { Octavian, Note } from 'octavian';
 import SoundLoader from './SoundLoader.js';
 import Visualizer from './Visualizer.js';
@@ -19,21 +19,14 @@ export default class Song {
         ready: false
       };
       this.bass = {
-        synth: null,
+        synths: [],
+        gains: [],
         masterGain: null,
         analyser: null,
         ready: false
       };
-      this.keys = {
-        buffers: [],
-        sources: [],
-        masterGain: null,
-        analyser: null,
-        ready: false
-      };
-      this.solo = {
-        buffers: [],
-        sources: [],
+      this.bg = {
+        voices: [],
         masterGain: null,
         analyser: null,
         ready: false
@@ -42,18 +35,35 @@ export default class Song {
       let soundLoader = new SoundLoader(this.context);
       soundLoader.loadDrumsBuffer((b) => this.FinishedLoadingDrums(b));
       this.LoadBassSynth();
+      this.LoadBGSynth();
     }
     this.song = newSong;
     return songInstance;
   }
 
   LoadBassSynth() {
-    this.bass.synth = require('./BassSynth.js')(this.context);
     this.bass.masterGain = this.context.createGain();
+    for(var i = 0; i<2; i++) {
+      this.bass.synths[i] = MonoSynth(this.context);
+      this.bass.synths[i].oscillator.type = (i===0?"triangle":"square");
+      this.bass.gains[i] = this.context.createGain();
+      this.bass.gains[i].connect(this.bass.masterGain);
+      this.bass.synths[i].connect(this.bass.gains[i]);
+      if(i===1) this.bass.gains[i].gain.value = 0.25;
+    }
     this.bass.masterGain.connect(this.context.destination);
-    this.bass.synth.connect(this.bass.masterGain);
-    this.bass.masterGain.gain.value = 3;
     this.bass.ready = true;
+  }
+
+  LoadBGSynth() {
+    this.bg.masterGain = this.context.createGain();
+    for(var i = 0; i<4; i++) {
+      this.bg.voices[i] = MonoSynth(this.context);
+      this.bg.voices[i].oscillator.type = "sine";
+      this.bg.voices[i].connect(this.bg.masterGain);
+    }
+    this.bg.masterGain.connect(this.context.destination);
+    this.bg.masterGain.gain.value = 0.25;
   }
 
   FinishedLoadingDrums(bufferList) {
@@ -91,6 +101,18 @@ export default class Song {
     }
   }
 
+  PlayBGSounds(bar) {
+    var s = (60) / (this.song.tempo);
+    var octave = 4;
+    var rootStr = this.song.key+octave;
+    var note = new Note(rootStr);
+    note = this.GetNoteBar(note, bar);
+    var freq = this.GetFrequenciesBar(note, bar);
+    for(var i = 0; i<4; i++) {
+      this.bg.voices[i].trigger(freq[i], this.context.currentTime, s);
+    }
+  }
+
   PlayDrumSound(i) {
     if (this.drums.ready) {
       if (this.drums.sources[i]) {
@@ -105,15 +127,17 @@ export default class Song {
   }
 
   PlayBassSound(h, bar) {
-    var rootStr = this.song.key+"4";
+    var s = 60 / (this.song.tempo*8);
+    var octave = 2;
+    var rootStr = this.song.key+octave;
     var note = new Note(rootStr);
     note = this.GetNoteBar(note, bar);
-    note = this.GetNoteInterval(note, h);
-    var noteName = note.letter+(note.modifier===null?"":note.modifier);
-    var midi = this.NoteToMIDI(noteName, note.octave);
-    var s = 60 / (this.song.tempo*8);
-    this.bass.synth.update({midiNote: midi, attack: 0, decay: 0, sustain: s, release: s*0.1, peak: 0.5, mid: 0.3, end: 0.00001, detune: 0});
-    this.bass.synth.start(this.context.currentTime);
+    note = this.GetNoteInterval(note, bar, h);
+    for(var i = 0; i<this.bass.synths.length; i++) {
+      this.bass.gains[i].gain.value = (i===1?0.3:1);
+      this.bass.synths[i].trigger(note.frequency, this.context.currentTime);
+      this.bass.gains[i].gain.setTargetAtTime(0, this.context.currentTime, s);
+    }
   }
 
   GetNoteBar(rootNote, bar) {
@@ -155,57 +179,57 @@ export default class Song {
     return note;
   }
 
-  GetNoteInterval(note, interval) {
+  GetFrequenciesBar(note, bar) {
+    var freq = [];
+    freq.push(note.frequency);
+    if(this.song.progression[bar] > 0) {
+      freq.push(note.majorThird().frequency);
+    } else {
+      freq.push(note.minorThird().frequency);
+    }
+    freq.push(note.perfectFifth().frequency);
+    freq.push(note.perfectOctave().frequency);
+    return freq;
+  }
+
+  GetNoteInterval(note, bar, interval) {
     if(interval === 0.5) {
       return note;
     }
-    var minor = this.song.progression[0] < 0;
+    var minor = this.song.progression[bar] < 0;
     switch(interval) {
       case 0:
       note = note.downOctave();
       break;
-      case 0.1:
+      case 0.125:
       if(!minor) {
-        note = note.majorSecond().downOctave();
+        note = note.majorThird().downOctave();
       } else {
         note = note.minorThird().downOctave();
       }
       break;
-      case 0.2:
-      if(!minor) {
-        note = note.majorThird().downOctave();
-      } else {
-        note = note.perfectFourth().downOctave();
-      }
       break;
-      case 0.3:
+      case 0.25:
       note = note.perfectFifth().downOctave();
       break;
-      case 0.4:
+      case 0.375:
       if(!minor) {
         note = note.majorSixth().downOctave();
       } else {
         note = note.minorSeventh().downOctave();
       }
       break;
-      case 0.6:
+      case 0.625:
       if(!minor) {
-        note = note.majorSecond();
+        note = note.majorThird();
       } else {
         note = note.minorThird();
       }
       break;
-      case 0.7:
-      if(!minor) {
-        note = note.majorThird();
-      } else {
-        note = note.perfectFourth();
-      }
-      break;
-      case 0.8:
+      case 0.75:
       note = note.perfectFifth();
       break;
-      case 0.9:
+      case 0.875:
       if(!minor) {
         note = note.majorSixth();
       } else {
@@ -217,23 +241,5 @@ export default class Song {
       break;
     }
     return note;
-  }
-
-  NoteToMIDI(note, octave) {
-    var notes = {
-      "C": 0,
-      "C#": 1,
-      "D": 2,
-      "D#": 3,
-      "E": 4,
-      "F": 5,
-      "F#": 6,
-      "G": 7,
-      "G#": 8,
-      "A": 9,
-      "A#": 10,
-      "B": 11
-    };
-    return (octave * 12) + notes[note];
   }
 }
