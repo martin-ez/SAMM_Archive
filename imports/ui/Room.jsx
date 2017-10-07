@@ -15,7 +15,7 @@ class Room extends Component {
     super(props);
     this.state = {
       song: new Song(props.song),
-      instrument: "Bass",
+      instrument: "Drums",
       beat: 0,
       bar: 0,
       width: 0,
