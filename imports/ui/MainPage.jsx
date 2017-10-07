@@ -51,6 +51,10 @@ class MainPage extends Component {
 
         this.props.updateV('selectionView');
     }
+    demo(){
+
+
+    }
 
     render() {
         return (
@@ -93,6 +97,10 @@ class MainPage extends Component {
                         <button className="form-btn sx back" type="button">Back</button>
                         <button className="form-btn dx" type="submit">Log In</button>
                     </form>
+                </div>
+                <div className="button-container-1 demo">
+                    <span className="mas demo">App for creating awesome music between people</span><a href="https://www.youtube.com/watch?v=izSoM3-0JgU&list=RDizSoM3-0JgU">
+                    <button id='work' type="button" name="Hover">DEMO</button></a>
                 </div>
 
             </div>
