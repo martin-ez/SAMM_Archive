@@ -6,3 +6,14 @@
   grid-template-columns: repeat(4, 25vw);
   grid-template-rows: 35vh 65vh;
 }
+
+.InfoTab {
+  position: fixed;
+  top: 0;
+  right: 0;
+}
+#Spectrum {
+  position: fixed;
+  left: 0;
+  top: 0;
+}

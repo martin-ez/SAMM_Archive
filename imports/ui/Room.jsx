@@ -7,6 +7,7 @@ import Visualizer from './Visualizer.jsx';
 import Info from './Info.jsx';
 import Drums from './Drums.jsx';
 import Bass from './Bass.jsx';
+import DrawerMenu from './DrawerMenu.jsx';
 
 import './css/RoomStyle.css';
 
@@ -19,7 +20,8 @@ class Room extends Component {
       beat: 0,
       bar: 0,
       width: 0,
-      height: 0
+      height: 0,
+        open: false
     };
     this.updateWindowDimensions = this.updateWindowDimensions.bind(this);
   }
@@ -43,6 +45,9 @@ class Room extends Component {
       this.setState({beat: currentBeat, bar: currentBar});
     }, tInterval);
   }
+    handleToggle = () => this.setState({open: !this.state.open});
+
+    handleClose = () => this.setState({open: false});
 
   PlaySounds(currentBeat, currentBar) {
     if(currentBeat === 0) {
@@ -68,11 +73,18 @@ class Room extends Component {
   }
 
   render() {
+
+
     if (this.state.instrument === "") {
 
     } else if (this.state.instrument === "Drums") {
       return (
         <div id="Room">
+          <DrawerMenu estado={this.state.open} cerrar={()=>{this.handleClose()}} vista={(v)=>{this.props.updateV(v)}} />
+          <div className="button-container-1 options">
+            <span className="mas options">Click for options</span>
+            <button id='work' type="button" name="Hover" onClick={()=>{this.handleToggle()}}>{this.props.usuario?this.props.usuario.username:""}</button>
+          </div>
           <Visualizer instrument="Bass" create={(c, i) => this.CreateVisualizer(c, i)} width={this.state.width / 4} height={this.state.height * 0.35}/>
           <Visualizer instrument="Keys" create={(c, i) => this.CreateVisualizer(c, i)} width={this.state.width / 4} height={this.state.height * 0.35}/>
           <Visualizer instrument="Solo" create={(c, i) => this.CreateVisualizer(c, i)} width={this.state.width / 4} height={this.state.height * 0.35}/>
@@ -82,7 +94,13 @@ class Room extends Component {
       );
     } else if (this.state.instrument === "Bass") {
       return (
+
         <div id="Room">
+          <DrawerMenu estado={this.state.open} cerrar={()=>{this.handleClose()}} vista={(v)=>{this.props.updateV(v)}} />
+          <div className="button-container-1 options">
+            <span className="mas options">Click for options</span>
+            <button id='work' type="button" name="Hover" onClick={()=>{this.handleToggle()}}>{this.props.usuario?this.props.usuario.username:""}</button>
+          </div>
           <Visualizer instrument="Drums" create={(c, i) => this.CreateVisualizer(c, i)} width={this.state.width / 4} height={this.state.height * 0.35}/>
           <Visualizer instrument="Keys" create={(c, i) => this.CreateVisualizer(c, i)} width={this.state.width / 4} height={this.state.height * 0.35}/>
           <Visualizer instrument="Solo" create={(c, i) => this.CreateVisualizer(c, i)} width={this.state.width / 4} height={this.state.height * 0.35}/>

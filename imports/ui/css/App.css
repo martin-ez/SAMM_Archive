@@ -1,0 +1,20 @@
+.button-container-1.options{
+    position: fixed;
+    width: 10vw;
+    height: 5vw;
+    margin-left: 0;
+    margin-top:0;
+    z-index: 10;
+}
+.mas.options{
+
+    font-weight: 400;
+    font-size: 15px;
+    margin-top: 20px;
+
+}
+.InfoTab {
+    position: fixed;
+    top: 0;
+    right: 0;
+}

@@ -5,8 +5,9 @@ import {Songs} from '../api/songs.js';
 import Song from './Song.jsx';
 import MainPage from './MainPage.jsx';
 import SelectionView from './SelectionView.jsx';
-import './css/App.css';
+
 import './css/SelectionView.css';
+import './css/App.css';
 
 
 import Room from './Room.jsx';
@@ -56,12 +57,13 @@ class App extends Component {
         }
         if(this.state.vista==='room'){
 
-            return <Room song={this.state.song} update={(s) => this.UpdateSong(s)} updateV={(v)=>this.UpdateView(v)}/>
+            return <Room song={this.state.song} update={(s) => this.UpdateSong(s)} updateV={(v)=>this.UpdateView(v)} usuario={this.props.currentUser}/>
         }
     }
 
 
     render() {
+
         return (
 
             <div className="container">
