@@ -15,7 +15,7 @@ class Room extends Component {
     super(props);
     this.state = {
       song: new Song(props.song),
-      instrument: "Bass",
+      instrument: "Drums",
       beat: 0,
       bar: 0,
       width: 0,
@@ -97,9 +97,9 @@ class Room extends Component {
     this.state.song.CreateVisualizer(canvas, instrument);
   }
 
-  UpdateDrumPattern(hit, i, j) {
+  UpdateDrumPattern(newDrums) {
     let song = this.props.song;
-    song.drums.pattern[i][j] = hit;
+    song.drums = newDrums;
     this.props.update(song);
   }
 

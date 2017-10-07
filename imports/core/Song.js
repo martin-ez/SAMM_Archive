@@ -59,7 +59,7 @@ export default class Song {
 
   LoadBGSynth() {
     this.bg.masterGain = this.context.createGain();
-    for(var i = 0; i<4; i++) {
+    for(var i = 0; i<3; i++) {
       this.bg.voices[i] = this.context.createOscillator();
       this.bg.voices[i].type = "sine";
       this.bg.voices[i].connect(this.bg.masterGain);
@@ -70,7 +70,10 @@ export default class Song {
   }
 
   FinishedLoadingDrums(bufferList) {
-    this.drums.buffers = bufferList;
+    var names = ["kick", "snare", "hihat_close", "hihat_open", "clap"];
+    for(var i = 0; i<5; i++) {
+      this.drums.buffers[i] = bufferList[names[i]];
+    }
     this.drums.masterGain = this.context.createGain();
     this.drums.masterGain.connect(this.context.destination);
     for (var i = 0; i < 4; i++) {
@@ -111,7 +114,7 @@ export default class Song {
     var note = new Note(rootStr);
     note = this.GetNoteBar(note, bar);
     var freq = this.GetFrequenciesBar(note, bar);
-    for(var i = 0; i<4; i++) {
+    for(var i = 0; i<3; i++) {
       this.bg.voices[i].frequency.value = freq[i];
     }
     this.bg.masterGain.gain.value = 0.15;
@@ -125,7 +128,11 @@ export default class Song {
       }
       this.drums.sources[i] = this.context.createBufferSource();
       this.drums.sources[i].buffer = this.drums.buffers[i];
-      this.drums.sources[i].connect(this.drums.gains[i]);
+      var g = i;
+      if (i>2) {
+        g = i-1;
+      }
+      this.drums.sources[i].connect(this.drums.gains[g]);
       if(this.drums.analyser) this.drums.sources[i].connect(this.drums.analyser);
       this.drums.sources[i].start(0);
     }
@@ -194,9 +201,6 @@ export default class Song {
     note2 = new Note(note2.letter+(note2.modifier?"#":"")+"4");
     freq.push(note2.frequency);
     note2 = note.perfectFifth();
-    note2 = new Note(note2.letter+(note2.modifier?"#":"")+"4");
-    freq.push(note2.frequency);
-    note2 = note.perfectOctave();
     note2 = new Note(note2.letter+(note2.modifier?"#":"")+"4");
     freq.push(note2.frequency);
     return freq;

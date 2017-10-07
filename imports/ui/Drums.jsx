@@ -11,8 +11,7 @@ class Drums extends Component {
           {this.RenderLabels()}
         </div>
         <div className="drumPad">
-          {this.RenderPointer()}
-          {this.RenderPads(this.props.drums.pattern)}
+          {this.RenderPads()}
         </div>
         <div className="effectRack">
 
@@ -22,38 +21,64 @@ class Drums extends Component {
   }
 
   RenderLabels() {
-    var labels = ["","Kick", "Snare", "Hihat", "Other"];
+    var labels = ["kick", "snare", "hihat", "clap"];
     return labels.map((l, i) => {
-      if(i==0) return <div key={i} className="empty"></div>;
-      return <div key={i} className="label"><h1>{l}</h1></div>
+      return <div key={i} className="label">
+        <img src={"icons/"+l+".svg"} alt={l}/>
+      </div>
     });
   }
 
-  RenderPointer()
-  {
-    var pnt = [];
-    for(var i = 0; i<16; i++) {
-      pnt.push(i);
+  RenderPads() {
+    var beat = [];
+    for(var i = 0; i<16; i++){
+      beat.push(i);
     }
-    return pnt.map((v) => {
-      return <div key={v} className={"pointer " + (v==this.props.beat?"active":"")}></div>
+    return beat.map((v,i) => {
+      return (
+        <div key={i} className="padRow">
+          {this.RenderRow(i)}
+        </div>
+      );
     });
   }
 
-  RenderPads(pattern) {
-    return pattern.map((v,i) => {
-      return v.map((hit, j) => {
-        return <div key={i+':'+j}
-          className={"pad "+(hit==='x'?"active":"")}
-          onClick={() => this.UpdatePattern(i, j)}></div>;
-      });
+  RenderRow(j) {
+    var pad = [0, 1, 2, 4];
+    return pad.map((p, i) => {
+      if(i!==2) {
+        return (
+          <div key={i} className={"pad"+(this.props.drums.pattern[p][j]==='x'?" active":"")} onClick={() => this.UpdatePattern(p, j)}>
+            <div className="render"></div>
+          </div>
+        );
+      } else {
+        return (
+          <div key={i} className="hihat">
+            <div key={0}className={"hihatClosePad pad"+(this.props.drums.pattern[2][j]==='x'?" active":"")} onClick={() => this.UpdatePattern(2, j)}>
+              <div className="render"></div>
+            </div>
+            <div key={1} className={"hihatOpenPad pad"+(this.props.drums.pattern[3][j]==='x'?" active":"")} onClick={() => this.UpdatePattern(3, j)}>
+              <div className="render"></div>
+            </div>
+          </div>
+        );
+      }
     });
   }
 
   UpdatePattern(i, j) {
-    let oldHit = this.props.drums.pattern[i][j];
+    var newDrums = this.props.drums;
+    let oldHit = newDrums.pattern[i][j];
     let newHit = oldHit==='x' ? '-':'x';
-    this.props.update(newHit, i, j);
+    newDrums.pattern[i][j] = newHit;
+    if(i===2 && newHit==='x') {
+      newDrums.pattern[3][j] = '-';
+    }
+    if(i===3 && newHit==='x') {
+      newDrums.pattern[2][j] = '-';
+    }
+    this.props.update(newDrums);
   }
 }
 
