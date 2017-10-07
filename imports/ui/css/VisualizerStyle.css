@@ -1,5 +1,25 @@
 .Visualizer
 {
   width: 25vw;
-  height: 35vh:
+  height: 35vh;
+}
+
+.Visualizer.Drums
+{
+  background-color: #FE0000AA;
+}
+
+.Visualizer.Bass
+{
+  background-color: #011EFEAA;
+}
+
+.Visualizer.Keys
+{
+  background-color: #0BFF01AA;
+}
+
+.Visualizer.Solo
+{
+  background-color: #FE00F6AA;
 }

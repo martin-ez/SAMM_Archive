@@ -31,6 +31,8 @@ export default class Song {
         analyser: null,
         ready: false
       };
+      this.keys = {};
+      this.solo = {};
       this.ready = false;
       let soundLoader = new SoundLoader(this.context);
       soundLoader.loadDrumsBuffer((b) => this.FinishedLoadingDrums(b));
@@ -58,12 +60,13 @@ export default class Song {
   LoadBGSynth() {
     this.bg.masterGain = this.context.createGain();
     for(var i = 0; i<4; i++) {
-      this.bg.voices[i] = MonoSynth(this.context);
-      this.bg.voices[i].oscillator.type = "sine";
+      this.bg.voices[i] = this.context.createOscillator();
+      this.bg.voices[i].type = "sine";
       this.bg.voices[i].connect(this.bg.masterGain);
+      this.bg.voices[i].start(0);
     }
     this.bg.masterGain.connect(this.context.destination);
-    this.bg.masterGain.gain.value = 0.25;
+    this.bg.masterGain.gain.value = 0;
   }
 
   FinishedLoadingDrums(bufferList) {
@@ -102,15 +105,17 @@ export default class Song {
   }
 
   PlayBGSounds(bar) {
-    var s = (60) / (this.song.tempo);
+    var s = (60*8) / (this.song.tempo);
     var octave = 4;
     var rootStr = this.song.key+octave;
     var note = new Note(rootStr);
     note = this.GetNoteBar(note, bar);
     var freq = this.GetFrequenciesBar(note, bar);
     for(var i = 0; i<4; i++) {
-      this.bg.voices[i].trigger(freq[i], this.context.currentTime, s);
+      this.bg.voices[i].frequency.value = freq[i];
     }
+    this.bg.masterGain.gain.value = 0.15;
+    this.bg.masterGain.gain.setTargetAtTime(0, this.context.currentTime, s);
   }
 
   PlayDrumSound(i) {
@@ -134,8 +139,8 @@ export default class Song {
     note = this.GetNoteBar(note, bar);
     note = this.GetNoteInterval(note, bar, h);
     for(var i = 0; i<this.bass.synths.length; i++) {
-      this.bass.gains[i].gain.value = (i===1?0.3:1);
       this.bass.synths[i].trigger(note.frequency, this.context.currentTime);
+      this.bass.gains[i].gain.value = (i===1?0.5:1);
       this.bass.gains[i].gain.setTargetAtTime(0, this.context.currentTime, s);
     }
   }
@@ -182,13 +187,18 @@ export default class Song {
   GetFrequenciesBar(note, bar) {
     var freq = [];
     freq.push(note.frequency);
+    var note2 = note.minorThird();
     if(this.song.progression[bar] > 0) {
-      freq.push(note.majorThird().frequency);
-    } else {
-      freq.push(note.minorThird().frequency);
+      var note2 = note.majorThird();
     }
-    freq.push(note.perfectFifth().frequency);
-    freq.push(note.perfectOctave().frequency);
+    note2 = new Note(note2.letter+(note2.modifier?"#":"")+"4");
+    freq.push(note2.frequency);
+    note2 = note.perfectFifth();
+    note2 = new Note(note2.letter+(note2.modifier?"#":"")+"4");
+    freq.push(note2.frequency);
+    note2 = note.perfectOctave();
+    note2 = new Note(note2.letter+(note2.modifier?"#":"")+"4");
+    freq.push(note2.frequency);
     return freq;
   }
 

@@ -1,7 +1,6 @@
 import React, {Component} from 'react';
 import PropTypes from 'prop-types';
 import {createContainer} from 'meteor/react-meteor-data';
-import Slider from './Slider.jsx';
 import {Songs} from '../api/songs.js';
 import Song from './Song.jsx';
 import MainPage from './MainPage.jsx';
