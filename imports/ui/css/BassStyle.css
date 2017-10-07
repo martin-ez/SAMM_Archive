@@ -1,0 +1,39 @@
+.bassComponent
+{
+  display: grid;
+  grid-template-columns: 5vw 90vw 5vw;
+  grid-gap: 0.5vw;
+}
+
+.bassComponent .controls
+{
+  display: grid;
+  grid-template-columns: repeat(16, 1fr);
+}
+
+.bassComponent .step
+{
+  width: 100%;
+  height: 100%;
+  display: grid;
+  grid-template-rows: 90% 10%;
+}
+
+.bassComponent .step.active
+{
+  background-color: #CCC;
+}
+
+.bassComponent .step .slider
+{
+  display: flex;
+  align-items: center;
+  padding-left: 40%;
+}
+
+.bassComponent .step .toggle
+{
+  display: flex;
+  align-items: center;
+  padding-left: 20%;
+}

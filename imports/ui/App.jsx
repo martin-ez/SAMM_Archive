@@ -16,23 +16,10 @@ import Room from './Room.jsx';
 class App extends Component {
     constructor(props) {
         super(props);
+        import SongGenerator from '../core/SongGenerator.js';
+        var songGenerator = new SongGenerator();
         this.state = {
-            song: {
-                id: "B62",
-                tempo: 120,
-                key: "A#",
-                progression: ["I", "V", "vi", "IV"],
-                band: "Blue Eagle",
-                drums: {
-                    user: "BlaBla",
-                    pattern: [
-                        ['-', '-', '-', '-', '-', '-', '-', '-', '-', '-', '-', '-', '-', '-', '-', '-'],
-                        ['-', '-', '-', '-', '-', '-', '-', '-', '-', '-', '-', '-', '-', '-', '-', '-'],
-                        ['-', '-', '-', '-', '-', '-', '-', '-', '-', '-', '-', '-', '-', '-', '-', '-'],
-                        ['-', '-', '-', '-', '-', '-', '-', '-', '-', '-', '-', '-', '-', '-', '-', '-']
-                    ]
-                }
-            },
+            song: songGenerator.CreateNewSong(),
             vista: "login"
         }
     }
