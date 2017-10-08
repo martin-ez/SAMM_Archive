@@ -36,7 +36,7 @@ class Drums extends Component {
     }
     return beat.map((v,i) => {
       return (
-        <div key={i} className="padRow">
+        <div key={i} className={"padRow"+(i===this.props.beat?" active":"")}>
           {this.RenderRow(i)}
         </div>
       );

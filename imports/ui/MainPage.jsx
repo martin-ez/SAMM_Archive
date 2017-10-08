@@ -61,7 +61,7 @@ class MainPage extends Component {
             <div className="MainPage">
                 <div className="container">
                     <form className="signUp">
-                        <img src="logoGrande.jpg" alt="Logo SAMM" height="90" width="270"/>
+                        <img src="images/logo.png" alt="Logo SAMM" height="90" width="270"/>
                         <br/>
                         <p>Create your account
                         </p>
@@ -89,7 +89,7 @@ class MainPage extends Component {
                         </button>
                     </form>
                     <form className="signIn">
-                        <img src="logoGrande.jpg" alt="Logo SAMM" height="90" width="270"/>
+                        <img src="images/logo.png" alt="Logo SAMM" height="90" width="270"/>
                         <button className="fb" type="button">Log In With Facebook</button>
                         <p>- or -</p>
                         <input type="email" placeholder="Insert eMail"/>

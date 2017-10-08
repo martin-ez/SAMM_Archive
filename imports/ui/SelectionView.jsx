@@ -17,7 +17,7 @@ class SelectionView extends Component {
     render() {
         return (
             <div className="SelectionView">
-                <div className="header"><img src="logoGrande.jpg" alt="Logo SAMM" height="90" width="270"/></div>
+                <div className="header"><img src="images/logo.png" alt="Logo SAMM" height="90" width="270"/></div>
                 <div className="button-container-1">
                     <span className="mas">Interact with your saved songs</span>
                     <button id='work' type="button" name="Hover">Saved songs</button>

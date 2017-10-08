@@ -51,7 +51,7 @@
 
 .drumPad .padRow.active
 {
-  background-color: #CCC;
+  background-color: #ff3d3d;
 }
 
 .drumPad .padRow .hihat
