@@ -80,7 +80,7 @@ class Room extends Component {
     } else if (this.state.instrument === "Drums") {
       return (
         <div id="Room">
-          <DrawerMenu estado={this.state.open} cerrar={()=>{this.handleClose()}} vista={(v)=>{this.props.updateV(v)}} />
+          <DrawerMenu estado={this.state.open} cerrar={()=>{this.handleClose()}} vista={(v)=>{this.props.updateV(v)}} saveSong={()=>{this.props.saveS()}}/>
           <div className="button-container-1 options">
             <span className="mas options">Click for options</span>
             <button id='work' type="button" name="Hover" onClick={()=>{this.handleToggle()}}>{this.props.usuario?this.props.usuario.username:""}</button>
@@ -96,7 +96,7 @@ class Room extends Component {
       return (
 
         <div id="Room">
-          <DrawerMenu estado={this.state.open} cerrar={()=>{this.handleClose()}} vista={(v)=>{this.props.updateV(v)}} />
+          <DrawerMenu estado={this.state.open} cerrar={()=>{this.handleClose()}} vista={(v)=>{this.props.updateV(v)}} saveSong={()=>{this.props.saveS()}} />
           <div className="button-container-1 options">
             <span className="mas options">Click for options</span>
             <button id='work' type="button" name="Hover" onClick={()=>{this.handleToggle()}}>{this.props.usuario?this.props.usuario.username:""}</button>

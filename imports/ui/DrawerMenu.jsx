@@ -33,7 +33,7 @@ export default class DrawerMenu extends React.Component {
                         this.props.cerrar()
                     }}
                 >
-                    <MenuItem onClick={()=>{this.props.cerrar()}}>Saved your song</MenuItem>
+                    <MenuItem onClick={()=>{this.props.saveSong()}}>Save your song</MenuItem>
                     <MenuItem onClick={()=>{this.logOut()}}>Log out</MenuItem>
                 </Drawer>
             </div>

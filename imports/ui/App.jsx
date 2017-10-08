@@ -1,8 +1,8 @@
 import React, {Component} from 'react';
 import PropTypes from 'prop-types';
 import {createContainer} from 'meteor/react-meteor-data';
-import {Songs} from '../api/songs.js';
-import Song from './Song.jsx';
+import {SongsDBsesion, SongsDBsaved} from '../api/Songs.js';
+
 import MainPage from './MainPage.jsx';
 import SelectionView from './SelectionView.jsx';
 
@@ -24,40 +24,54 @@ class App extends Component {
         }
     }
 
-    handleSubmit(event) {
-        event.preventDefault();
+    saveSongsDBsaved() {
 
-        // Find the text field via the React ref
-        const text = ReactDOM.findDOMNode(this.refs.textInput).value.trim();
-
-        Song.insert({
-            text,
+        const _id = SongsDBsaved.insert({
+            song: this.state.song,
             createdAt: new Date(), // current time
             owner: Meteor.userId(),           // _id of logged in user
             username: Meteor.user().username,  // username of logged in user
         });
-
-        // Clear form
-        ReactDOM.findDOMNode(this.refs.textInput).value = '';
+        let newSong = {...this.state.song};
+        newSong._id = _id;
+        this.setState({song: newSong})
     }
 
-    toggleHideCompleted() {
-        this.setState({
-            hideCompleted: !this.state.hideCompleted,
-        });
+    saveSongsDBsesion() {
+
+        if (this.state.song._id) {
+            SongsDBsesion.update(this.state.song._id, {
+                $set: {song: this.state.song},
+            });
+        }
+        else {
+            const _id = SongsDBsesion.insert({
+                song: this.state.song,
+                createdAt: new Date(), // current time
+                owner: Meteor.userId(),           // _id of logged in user
+                username: Meteor.user().username,  // username of logged in user
+            });
+            let newSong = {...this.state.song};
+            newSong._id = _id;
+            this.setState({song: newSong})
+        }
     }
-    renderView(){
+    renderView() {
 
-        if (this.state.vista==='login'){
+        if (this.state.vista === 'login') {
 
-            return <MainPage updateV={(v)=>this.UpdateView(v)}/>
+            return <MainPage updateV={(v) => this.UpdateView(v)}/>
         }
-        if(this.state.vista==='selectionView'){
-            return<SelectionView updateV={(v)=>this.UpdateView(v)}/>
+        if (this.state.vista === 'selectionView') {
+            return <SelectionView updateV={(v) => this.UpdateView(v)}/>
         }
-        if(this.state.vista==='room'){
+        if (this.state.vista === 'room') {
 
-            return <Room song={this.state.song} update={(s) => this.UpdateSong(s)} updateV={(v)=>this.UpdateView(v)} usuario={this.props.currentUser}/>
+            return <Room song={this.state.song} update={(s) => this.UpdateSong(s)} updateV={(v) => this.UpdateView(v)}
+                         usuario={this.props.currentUser}
+                         saveS={() => {
+                             this.saveSongsDBsaved()
+                         }}/>
         }
     }
 
@@ -68,7 +82,7 @@ class App extends Component {
 
             <div className="container">
                 {this.renderView()}
-                {console.log(this.state.vista)}
+
             </div>
         );
     }
@@ -77,8 +91,10 @@ class App extends Component {
         this.setState({
             song: s
         });
+        this.saveSongsDBsesion();
     }
-    UpdateView(view){
+
+    UpdateView(view) {
 
         this.setState({vista: view})
     }
