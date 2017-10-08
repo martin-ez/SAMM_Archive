@@ -1,7 +1,7 @@
 import React, {Component} from 'react';
 import PropTypes from 'prop-types';
 import {createContainer} from 'meteor/react-meteor-data';
-import {SongsDBsesion, SongsDBsaved} from '../api/Songs.js';
+import {SongsDBsesion, SongsDBsaved} from './api/Songs.js';
 
 import MainPage from './MainPage.jsx';
 import SelectionView from './SelectionView.jsx';
