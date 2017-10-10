@@ -24,6 +24,8 @@ SongGenerator.prototype.CreateNewSong = function() {
       user: "",
       pattern: [0.5,0.5,0.5,0.5,0.5,0.5,0.5,0.5,0.5,0.5,0.5,0.5,0.5,0.5,0.5,0.5],
       sound: [0.1, 0.1, 0.1, 0.1]
+      //necesitaban esto desde el principio?
+      //no era mejor un default en la BBDD?
     }
   };
   var tempos = [75, 80, 85, 90, 95, 100];

@@ -86,7 +86,15 @@ class App extends Component {
     }
     if (this.state.vista === 'room') {
 
-      return <Room song={this.state.song} user={this.props.currentUser!==null?this.props.currentUser.username:"Guest"} update={(s) => this.UpdateSong(s)} updateV={(v) => this.UpdateView(v)} usuario={this.props.currentUser} saveS={() => this.saveSongsDBsaved()}/>
+//return en varias líneas por legibilidad
+      return <Room
+        song={this.state.song}
+        user={this.props.currentUser!==null?
+          this.props.currentUser.username:"Guest"}
+          update={(s) => this.UpdateSong(s)}
+          updateV={(v) => this.UpdateView(v)}
+          usuario={this.props.currentUser}
+          saveS={() => this.saveSongsDBsaved()}/>
     }
   }
 

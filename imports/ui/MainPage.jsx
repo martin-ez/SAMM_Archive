@@ -57,6 +57,8 @@ class MainPage extends Component {
     }
 
     render() {
+      //no se explica la ágina
+      //Tal vez hacer el form un componente?
         return (
             <div className="MainPage">
                 <div className="container">

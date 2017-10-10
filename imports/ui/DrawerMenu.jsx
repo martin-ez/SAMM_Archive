@@ -35,6 +35,7 @@ export default class DrawerMenu extends React.Component {
                 >
                     <MenuItem onClick={()=>{this.props.saveSong()}}>Save your song</MenuItem>
                     <MenuItem onClick={()=>{this.logOut()}}>Log out</MenuItem>
+                    {//no pude llegar al home desde el drawer, mal por eso :()}
                 </Drawer>
             </div>
         );
