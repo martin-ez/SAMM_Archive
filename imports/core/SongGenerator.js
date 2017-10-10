@@ -1,7 +1,10 @@
+// Math.random crea un número entre 0 y 1 el cual nunca es uno, por lo que en todos los randoms que ustedes hacen el último valor del arreglo nunca se seleccionará
+// Para que esto no suceda pueden usar Math.floor(Math.random() * array.length + 1)
 function SongGenerator() {
 }
 
 SongGenerator.prototype.CreateNewSong = function() {
+  // En js no es innecesario la asignación de valores vacíos
   var newSong = {
     id: "",
     tempo: 0,
