@@ -1,7 +1,7 @@
 function SoundLoader(context) {
   this.context = context;
 }
-
+/** Podran hacer uso de let o const dependiendo lo que necesiten **/
 SoundLoader.prototype.loadDrumsBuffer = function(callback) {
   var DrumsSounds = require('../sounds/DrumsSounds.js');
   var Binary64Binary = require('./base64-binary.js');
@@ -21,6 +21,7 @@ SoundLoader.prototype.loadDrumsBuffer = function(callback) {
     "clap": null
   };
   sources.map((source, index) => {
+    /* Podrían hacer uso de const */
     var byteArray = Base64Binary.decodeArrayBuffer(source);
     loader.context.decodeAudioData(byteArray, function(buffer) {
       if(!buffer) {
@@ -38,7 +39,7 @@ SoundLoader.prototype.loadDrumsBuffer = function(callback) {
     });
   });
 }
-
+/* Se podrían eliminar los comentarios */
 SoundLoader.prototype.loadBassBuffer = function(callback) {
   /*var BassSounds = require('../sounds/BassSounds.js');
   var Binary64Binary = require('./base64-binary.js');
