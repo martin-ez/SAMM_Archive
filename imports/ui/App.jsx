@@ -55,7 +55,7 @@ class App extends Component {
   }
 
   saveSongsDBsesion() {
-    var user = this.props.currentUser!==null?this.props.currentUser.username:"Guest";
+    var user = this.props.currentUser?this.props.currentUser.username:"Guest";
     if (this.state.song._id) {
       SongsDBsesion.update(this.state.song._id, {
         $set: {
