@@ -31,7 +31,9 @@ export default class Song {
         analyser: null,
         ready: false
       };
-      this.keys = {};
+      this.keys = {
+        analyser: null
+      };
       this.solo = {};
       this.ready = false;
       let soundLoader = new SoundLoader(this.context);

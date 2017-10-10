@@ -9,106 +9,122 @@ import SelectionView from './SelectionView.jsx';
 import './css/SelectionView.css';
 import './css/App.css';
 
-
 import Room from './Room.jsx';
 
 // App component - represents the whole app
 class App extends Component {
-    constructor(props) {
-        super(props);
-        import SongGenerator from '../core/SongGenerator.js';
-        var songGenerator = new SongGenerator();
-        this.state = {
-            song: songGenerator.CreateNewSong(),
-            vista: "login"
+  constructor(props) {
+    super(props);
+    var sessionSong = null;
+    var end = false;
+    if (this.props.songs.length !== 0) {
+      for (var i = 0; i < this.props.songs.length && !end; i++) {
+        if (this.props.songs[i].song.drums.user === "" || this.props.songs[i].song.bass.user === "") {
+          sessionSong = this.props.songs[i].song;
+          end = true;
         }
+      }
     }
-
-    saveSongsDBsaved() {
-
-        const _id = SongsDBsaved.insert({
-            song: this.state.song,
-            createdAt: new Date(), // current time
-            owner: Meteor.userId(),           // _id of logged in user
-            username: Meteor.user().username,  // username of logged in user
-        });
-        let newSong = {...this.state.song};
-        newSong._id = _id;
-        this.setState({song: newSong})
+    if (!end) {
+      import SongGenerator from '../core/SongGenerator.js';
+      var songGenerator = new SongGenerator();
+      sessionSong = songGenerator.CreateNewSong();
     }
+    this.state = {
+      song: sessionSong,
+      vista: "login"
+    }
+  }
 
-    saveSongsDBsesion() {
+  componentWillMount() {
+    this.saveSongsDBsesion();
+  }
 
-        if (this.state.song._id) {
-            SongsDBsesion.update(this.state.song._id, {
-                $set: {song: this.state.song},
-            });
+  saveSongsDBsaved() {
+    var user = this.props.currentUser!==null?this.props.currentUser.username:"Guest";
+    const _id = SongsDBsaved.insert({
+      song: this.state.song, createdAt: new Date(), // current time
+      owner: Meteor.userId(), // _id of logged in user
+      username: user // username of logged in user
+    });
+    let newSong = {
+      ...this.state.song
+    };
+    newSong._id = _id;
+    this.setState({song: newSong})
+  }
+
+  saveSongsDBsesion() {
+    var user = this.props.currentUser!==null?this.props.currentUser.username:"Guest";
+    if (this.state.song._id) {
+      SongsDBsesion.update(this.state.song._id, {
+        $set: {
+          song: this.state.song
         }
-        else {
-            const _id = SongsDBsesion.insert({
-                song: this.state.song,
-                createdAt: new Date(), // current time
-                owner: Meteor.userId(),           // _id of logged in user
-                username: Meteor.user().username,  // username of logged in user
-            });
-            let newSong = {...this.state.song};
-            newSong._id = _id;
-            this.setState({song: newSong})
-        }
+      });
+    } else {
+      const _id = SongsDBsesion.insert({
+        song: this.state.song, createdAt: new Date(), // current time
+        owner: Meteor.userId(), // _id of logged in user
+        username: user, // username of logged in user
+      });
+      let newSong = {
+        ...this.state.song
+      };
+      newSong._id = _id;
+      this.setState({song: newSong})
     }
-    renderView() {
+  }
+  renderView() {
 
-        if (this.state.vista === 'login') {
+    if (this.state.vista === 'login') {
 
-            return <MainPage updateV={(v) => this.UpdateView(v)}/>
-        }
-        if (this.state.vista === 'selectionView') {
-            return <SelectionView updateV={(v) => this.UpdateView(v)}/>
-        }
-        if (this.state.vista === 'room') {
-
-            return <Room song={this.state.song} update={(s) => this.UpdateSong(s)} updateV={(v) => this.UpdateView(v)}
-                         usuario={this.props.currentUser}
-                         saveS={() => {
-                             this.saveSongsDBsaved()
-                         }}/>
-        }
+      return <MainPage updateV={(v) => this.UpdateView(v)}/>
     }
-
-
-    render() {
-
-        return (
-
-            <div className="container">
-                {this.renderView()}
-
-            </div>
-        );
+    if (this.state.vista === 'selectionView') {
+      return <SelectionView updateV={(v) => this.UpdateView(v)}/>
     }
+    if (this.state.vista === 'room') {
 
-    UpdateSong(s) {
-        this.setState({
-            song: s
-        });
-        this.saveSongsDBsesion();
+      return <Room song={this.state.song} user={this.props.currentUser!==null?this.props.currentUser.username:"Guest"} update={(s) => this.UpdateSong(s)} updateV={(v) => this.UpdateView(v)} usuario={this.props.currentUser} saveS={() => this.saveSongsDBsaved()}/>
     }
+  }
 
-    UpdateView(view) {
+  render() {
 
-        this.setState({vista: view})
-    }
+    return (
+
+      <div className="container">
+        {this.renderView()}
+
+      </div>
+    );
+  }
+
+  UpdateSong(s) {
+    this.setState({song: s});
+    this.saveSongsDBsesion();
+  }
+
+  UpdateView(view) {
+
+    this.setState({vista: view})
+  }
 }
 
 App.propTypes = {
-    currentUser: PropTypes.object,
-    // songs: PropTypes.array.isRequired
+  currentUser: PropTypes.object,
+  // songs: PropTypes.array.isRequired
 };
 
 export default createContainer(() => {
-    return {
-        // songs: Songs.find({}, {sort: {createdAt: -1}}).fetch(),
-        // incompleteCount: Songs.find({checked: {$ne: true}}).count(),
-        currentUser: Meteor.user(),
-    };
+  return {
+    songs: SongsDBsesion.find({}, {
+      sort: {
+        createdAt: -1
+      }
+    }).fetch(),
+    // incompleteCount: Songs.find({checked: {$ne: true}}).count(),
+    currentUser: Meteor.user()
+  };
 }, App);
