@@ -34,6 +34,11 @@
   align-items: center;
 }
 
+.SelectCard .button.taken
+{
+  cursor: default;
+}
+
 .SelectCard .button:not(.taken)
 {
   cursor: pointer;

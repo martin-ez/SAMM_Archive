@@ -33,7 +33,6 @@ class MainPage extends Component {
     }
 
     onEnterSignUp() {
-
         Accounts.createUser({
             username: this.state.userName,
             email: this.state.email,

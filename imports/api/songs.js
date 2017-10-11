@@ -1,4 +1,4 @@
 import { Mongo } from 'meteor/mongo';
 
-export const SongsDBsaved = new Mongo.Collection('songs');
-export const SongsDBsesion = new Mongo.Collection('songsSesion');
+export const SavedDB = new Mongo.Collection('songs');
+export const SessionDB = new Mongo.Collection('songsSesion');
