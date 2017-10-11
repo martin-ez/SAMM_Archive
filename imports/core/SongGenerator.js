@@ -27,9 +27,9 @@ SongGenerator.prototype.CreateNewSong = function() {
     }
   };
   var tempos = [75, 80, 85, 90, 95, 100];
-  newSong.tempo = tempos[Math.floor(Math.random() * tempos.length)];
+  newSong.tempo = tempos[Math.floor(Math.random() * (tempos.length+1))];
   var keys = ['A', 'A#', 'B', 'C', 'C#', 'D', 'D#', 'E', 'F', 'F#', 'G', 'G#'];
-  newSong.key = keys[Math.floor(Math.random() * keys.length)];
+  newSong.key = keys[Math.floor(Math.random() * (keys.length+1))];
   newSong.progression = this.CreateProgression();
   newSong.band = this.CreateBandName();
   return newSong;
@@ -51,7 +51,7 @@ SongGenerator.prototype.CreateProgression = function() {
     [-1, 7, 6, 7]
   ];
 
-  return progressions[Math.floor(Math.random() * progressions.length)];
+  return progressions[Math.floor(Math.random() * (progressions.length+1))];
 }
 
 SongGenerator.prototype.CreateBandName = function() {
@@ -80,7 +80,7 @@ SongGenerator.prototype.CreateBandName = function() {
   "Yellow","YellowGreen"];
   var animals = require('animals');
   var a = animals();
-  return "The " +colors[Math.floor(Math.random() * colors.length)] +" "+a.charAt(0).toUpperCase() + a.slice(1)+"s";
+  return "The " +colors[Math.floor(Math.random() * (colors.length+1))] +" "+a.charAt(0).toUpperCase() + a.slice(1)+"s";
 }
 
 export default SongGenerator;

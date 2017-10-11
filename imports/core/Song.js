@@ -23,6 +23,7 @@ export default class Song {
         gains: [],
         masterGain: null,
         analyser: null,
+        analyserConnected: false,
         ready: false
       };
       this.bg = {
@@ -32,7 +33,8 @@ export default class Song {
         ready: false
       };
       this.keys = {
-        analyser: null
+        analyser: null,
+        analyserConnected: false
       };
       this.solo = {};
       this.ready = false;
@@ -121,6 +123,12 @@ export default class Song {
     }
     this.bg.masterGain.gain.value = 0.15;
     this.bg.masterGain.gain.setTargetAtTime(0, this.context.currentTime, s);
+    if(!this.keys.analyserConnected && this.keys.analyser !== null) {
+      for(var i = 0; i<3; i++) {
+        this.bg.voices[i].connect(this.keys.analyser);
+      }
+      this.keys.analyserConnected = true;
+    }
   }
 
   PlayDrumSound(i) {
@@ -151,6 +159,12 @@ export default class Song {
       this.bass.synths[i].trigger(note.frequency, this.context.currentTime);
       this.bass.gains[i].gain.value = (i===1?0.5:1);
       this.bass.gains[i].gain.setTargetAtTime(0, this.context.currentTime, s);
+    }
+    if(!this.bass.analyserConnected && this.bass.analyser !== null) {
+      for(var i = 0; i<this.bass.synths.length; i++) {
+        this.bass.synths[i].oscillator.connect(this.bass.analyser);
+      }
+      this.bass.analyserConnected = true;
     }
   }
 

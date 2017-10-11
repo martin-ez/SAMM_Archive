@@ -1,7 +1,10 @@
 import React, {Component} from 'react';
 import PropTypes from 'prop-types';
+
+import {Meteor} from 'meteor/meteor';
 import {createContainer} from 'meteor/react-meteor-data';
-import {SongsDBsesion, SongsDBsaved} from './api/Songs.js';
+import {SessionDB} from '../api/SessionSongs.js';
+import {SavedDB} from '../api/SavedSongs.js';
 
 import MainPage from './MainPage.jsx';
 import SelectionView from './SelectionView.jsx';
@@ -15,45 +18,21 @@ import Room from './Room.jsx';
 class App extends Component {
   constructor(props) {
     super(props);
-    var sessionSong = null;
-    var end = false;
-    if (this.props.songs.length !== 0) {
-      for (var i = 0; i < this.props.songs.length && !end; i++) {
-        if (this.props.songs[i].song.drums.user === "" || this.props.songs[i].song.bass.user === "") {
-          sessionSong = this.props.songs[i].song;
-          end = true;
-        }
-      }
-    }
-    if (!end) {
-      import SongGenerator from '../core/SongGenerator.js';
-      var songGenerator = new SongGenerator();
-      sessionSong = songGenerator.CreateNewSong();
-    }
     this.state = {
-      song: sessionSong,
+      song: null,
       vista: "login"
     }
   }
 
-  componentWillMount() {
-    this.saveSongsDBsesion();
+  render() {
+    return (
+      <div className="container">
+        {this.renderView()}
+      </div>
+    );
   }
 
-  saveSongsDBsaved() {
-    var user = this.props.currentUser!==null?this.props.currentUser.username:"Guest";
-    const _id = SongsDBsaved.insert({
-      song: this.state.song, createdAt: new Date(), // current time
-      owner: Meteor.userId(), // _id of logged in user
-      username: user // username of logged in user
-    });
-    let newSong = {
-      ...this.state.song
-    };
-    newSong._id = _id;
-    this.setState({song: newSong})
-  }
-
+<<<<<<< HEAD
   saveSongsDBsesion() {
     var user = this.props.currentUser?this.props.currentUser.username:"Guest";
     if (this.state.song._id) {
@@ -75,6 +54,8 @@ class App extends Component {
       this.setState({song: newSong})
     }
   }
+=======
+>>>>>>> f2233503ab43febf67a65816dd2dc2ff934464bf
   renderView() {
 
     if (this.state.vista === 'login') {
@@ -85,46 +66,102 @@ class App extends Component {
       return <SelectionView updateV={(v) => this.UpdateView(v)}/>
     }
     if (this.state.vista === 'room') {
-
-      return <Room song={this.state.song} user={this.props.currentUser!==null?this.props.currentUser.username:"Guest"} update={(s) => this.UpdateSong(s)} updateV={(v) => this.UpdateView(v)} usuario={this.props.currentUser} saveS={() => this.saveSongsDBsaved()}/>
+      return <Room song={this.state.song.song} user={this.props.currentUser!==null?this.props.currentUser.username:"Guest"} update={(s) => this.UpdateSong(s)} updateV={(v) => this.UpdateView(v)} usuario={this.props.currentUser} saveS={() => this.saveSongsDBsaved()}/>
     }
   }
 
-  render() {
-
-    return (
-
-      <div className="container">
-        {this.renderView()}
-
-      </div>
-    );
+  UpdateSong(song) {
+    var id = this.state.song._id;
+    Meteor.call('session.updateSong',{
+      id,
+      song
+    }, (err, res) => {
+      if (err) {
+        console.log(err);
+      } else {
+        console.log('SessionSong updated');
+        var s = SessionDB.findOne(id);
+        this.setState({song: s});
+      }
+    });
   }
 
-  UpdateSong(s) {
-    this.setState({song: s});
-    this.saveSongsDBsesion();
+  saveSongsDBsaved() {
+    var song = this.state.song.song;
+    var owner = Meteor.userId();
+    Meteor.call('saved.addSong',{
+      song,
+      owner
+    }, (err, res) => {
+      if (err) {
+        console.log(err);
+      } else {
+        console.log('SavedSong added');
+      }
+    });
   }
 
   UpdateView(view) {
-
-    this.setState({vista: view})
+    if(view==='selectionView') {
+      var end = false;
+      if (this.props.songs.length !== 0) {
+        for (var i = 0; i < this.props.songs.length && !end; i++) {
+          if (this.props.songs[i].noUsers < 2) {
+            var id = this.props.songs[i]._id;
+            Meteor.call('session.addUser',{
+              id
+            }, (err, res) =>{
+              if (err) {
+                console.log(err);
+              } else {
+                console.log('SessionSong updated');
+                var s = SessionDB.findOne(id);
+                this.setState({
+                  song: s,
+                  vista: view
+                });
+              }
+            });
+            end = true;
+          }
+        }
+      }
+      if (!end) {
+        import SongGenerator from '../core/SongGenerator.js';
+        var songGenerator = new SongGenerator();
+        var song = songGenerator.CreateNewSong();
+        var noUsers = 1;
+        Meteor.call('session.addSong',{
+          song,
+          noUsers
+        }, (err, res) => {
+          if (err) {
+            console.log(err);
+          } else {
+            console.log('SessionSong added');
+            var s = res;
+            this.setState({
+              song: s,
+              vista: view
+            });
+          }
+        });
+      }
+    } else {
+      this.setState({vista: view});
+    }
   }
 }
 
 App.propTypes = {
-  currentUser: PropTypes.object,
-  // songs: PropTypes.array.isRequired
+  songs: PropTypes.array.isRequired,
+  currentUser: PropTypes.object
 };
 
-export default createContainer(() => {
+export default createContainer((props) => {
+  Meteor.subscribe('session');
   return {
-    songs: SongsDBsesion.find({}, {
-      sort: {
-        createdAt: -1
-      }
-    }).fetch(),
-    // incompleteCount: Songs.find({checked: {$ne: true}}).count(),
-    currentUser: Meteor.user()
+    songs: SessionDB.find({}).fetch(),
+    currentUser: (Meteor.user())?Meteor.user():{}
   };
 }, App);
