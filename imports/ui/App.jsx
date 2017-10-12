@@ -51,9 +51,9 @@ class App extends Component {
     Meteor.call('session.updateSong',{
       id,
       song
-    }, (err, res) => {
-      if (err) {
-        console.log(err);
+    }, (error, resesponse) => {
+      if (error) {
+        console.log(error);
       } else {
         console.log('SessionSong updated');
         var s = SessionDB.findOne(id);
@@ -86,9 +86,9 @@ class App extends Component {
             var id = this.props.songs[i]._id;
             Meteor.call('session.addUser',{
               id
-            }, (err, res) =>{
-              if (err) {
-                console.log(err);
+            }, (error, response) =>{
+              if (error) {
+                console.log(error);
               } else {
                 console.log('SessionSong updated');
                 var s = SessionDB.findOne(id);
@@ -110,12 +110,12 @@ class App extends Component {
         Meteor.call('session.addSong',{
           song,
           noUsers
-        }, (err, res) => {
-          if (err) {
-            console.log(err);
+        }, (error, response) => {
+          if (error) {
+            console.log(error);
           } else {
             console.log('SessionSong added');
-            var s = res;
+            var s = SessionDB.findOne(response);
             this.setState({
               song: s,
               vista: view

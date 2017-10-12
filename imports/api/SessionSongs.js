@@ -12,24 +12,24 @@ if (Meteor.isServer) {
 
 Meteor.methods({
   'session.addSong'({song,noUsers}){
-    SessionDB.insert({
+    return SessionDB.insert({
       song:song,
       noUsers:noUsers
     });
   },
   'session.updateSong'({id,song}){
-    SessionDB.update(id,{
+    return SessionDB.update(id,{
       $set: {song:song}
     });
   },
   'session.addUser'({id}){
     var s = SessionDB.findOne(id);
     var users = s.noUsers+1;
-    SessionDB.update(id,{
+    return SessionDB.update(id,{
       $set: {noUsers:users}
     });
   },
   'session.deleteSong'({id}){
-    SessionDB.remove(id);
+    return SessionDB.remove(id);
   }
 });

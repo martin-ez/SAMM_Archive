@@ -12,17 +12,17 @@ if (Meteor.isServer) {
 
 Meteor.methods({
   'saved.addSong'({song, owner}){
-    SavedDB.insert({
+    return SavedDB.insert({
       song:song,
       owner:owner
     });
   },
   'saved.updateSong'({id, song}){
-    SavedDB.update(id,{
+    return SavedDB.update(id,{
       $set: {song:song}
     });
   },
   'saved.deleteSong'({id}){
-    SavedDB.remove(id);
+    return SavedDB.remove(id);
   }
 });
