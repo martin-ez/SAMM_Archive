@@ -13,14 +13,14 @@ class Visualizer extends Component {
 
   render() {
     return (
-      <div className={"Visualizer " +this.props.instrument}>
+      <div className={"Visualizer " +this.props.instrument+(this.props.display?"":" hidden")}>
         {this.RenderTag()}
         <Slider defaultValue={1} axis="x" step={0.05} onChange={(evt, value) => this.ChangeVolume(value)}/>
         <div className="canvasContainer">
           <canvas id="Spectrum"
             ref="canvas"
             width={this.props.width}
-            height={this.props.height}></canvas>          
+            height={this.props.height}></canvas>
         </div>
       </div>
     );
@@ -48,6 +48,7 @@ class Visualizer extends Component {
 }
 
 Visualizer.propTypes = {
+  display: PropTypes.bool.isRequired,
   instrument: PropTypes.string.isRequired,
   user: PropTypes.string.isRequired,
   volume: PropTypes.func.isRequired,
