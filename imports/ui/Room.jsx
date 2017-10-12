@@ -89,9 +89,9 @@ class Room extends Component {
           <span className="mas options">Click for options</span>
           <button id='work' type="button" name="Hover" onClick={()=>{this.handleToggle()}}>{this.props.user?this.props.user.username:""}</button>
         </div>
-        <Visualizer instrument="Drums" user={this.props.song.drums.user} volume={(val, ins) => this.ChangeVolume(val, ins)} create={(c, i) => this.CreateVisualizer(c, i)} width={this.state.width / 4} height={this.state.height * 0.2}/>
-        <Visualizer instrument="Bass" user={this.props.song.bass.user} volume={(val, ins) => this.ChangeVolume(val, ins)} create={(c, i) => this.CreateVisualizer(c, i)} width={this.state.width / 4} height={this.state.height * 0.2}/>
-        <Info song={this.props.song} bar={this.state.bar}/>
+        <Visualizer display={this.state.instrument!==""} instrument="Drums" user={this.props.song.drums.user} volume={(val, ins) => this.ChangeVolume(val, ins)} create={(c, i) => this.CreateVisualizer(c, i)} width={this.state.width / 4} height={this.state.height * 0.2}/>
+        <Visualizer display={this.state.instrument!==""} instrument="Bass" user={this.props.song.bass.user} volume={(val, ins) => this.ChangeVolume(val, ins)} create={(c, i) => this.CreateVisualizer(c, i)} width={this.state.width / 4} height={this.state.height * 0.2}/>
+        <Info display={this.state.instrument!==""} song={this.props.song} bar={this.state.bar}/>
         {this.RenderInstrument()}
       </div>
     );

@@ -12,6 +12,11 @@
   text-align: center;
 }
 
+.Visualizer.hidden
+{
+  display: none;
+}
+
 .Visualizer .canvasContainer
 {
   position: relative;

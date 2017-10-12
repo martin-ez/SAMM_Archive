@@ -6,7 +6,7 @@ import './css/InfoStyle.css';
 class Info extends Component {
   render() {
     return (
-      <div className="InfoTab">
+      <div className={"InfoTab"+(this.props.display?"":" hidden")}>
         <h3>Band:</h3>
         <h2>{this.props.song.band}</h2>
         <h3>{"Key: "+this.props.song.key}</h3>
@@ -57,6 +57,7 @@ class Info extends Component {
 }
 
 Info.propTypes = {
+  display: PropTypes.bool.isRequired,
   song: PropTypes.object.isRequired,
   bar: PropTypes.number.isRequired
 }
