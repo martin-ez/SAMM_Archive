@@ -1,7 +1,7 @@
 import React, {Component} from 'react';
 import PropTypes from 'prop-types';
 
-import Song from '../core/Song.js';
+import SoundEngine from '../core/SoundEngine.js';
 
 import Visualizer from './Visualizer.jsx';
 import Info from './Info.jsx';
@@ -16,7 +16,7 @@ class Room extends Component {
   constructor(props) {
     super(props);
     this.state = {
-      song: new Song(props.song),
+      song: new SoundEngine(props.song),
       instrument: "",
       beat: 0,
       bar: 0,
@@ -83,7 +83,7 @@ class Room extends Component {
         <DrawerMenu estado={this.state.open} cerrar={()=>{this.handleClose()}} vista={(v)=>{this.props.updateV(v)}} saveSong={()=>{this.props.saveS()}}/>
         <div className="button-container-1 options">
           <span className="mas options">Click for options</span>
-          <button id='work' type="button" name="Hover" onClick={()=>{this.handleToggle()}}>{this.props.usuario?this.props.usuario.username:""}</button>
+          <button id='work' type="button" name="Hover" onClick={()=>{this.handleToggle()}}>{this.props.user?this.props.user.username:""}</button>
         </div>
         <Visualizer instrument="Drums" create={(c, i) => this.CreateVisualizer(c, i)} width={this.state.width / 4} height={this.state.height * 0.35}/>
         <Visualizer instrument="Bass" create={(c, i) => this.CreateVisualizer(c, i)} width={this.state.width / 4} height={this.state.height * 0.35}/>

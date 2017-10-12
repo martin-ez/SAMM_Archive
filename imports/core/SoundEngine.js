@@ -4,7 +4,7 @@ import { Octavian, Note } from 'octavian';
 import SoundLoader from './SoundLoader.js';
 import Visualizer from './Visualizer.js';
 
-export default class Song {
+export default class SoundEngine {
   constructor(newSong) {
     if (!songInstance) {
       songInstance = this;

@@ -2,6 +2,7 @@ import React, {Component} from 'react';
 import PropTypes from 'prop-types';
 
 import {Meteor} from 'meteor/meteor';
+import { Session } from 'meteor/session';
 import {createContainer} from 'meteor/react-meteor-data';
 import {SessionDB} from '../api/SessionSongs.js';
 import {SavedDB} from '../api/SavedSongs.js';
@@ -19,7 +20,6 @@ class App extends Component {
   constructor(props) {
     super(props);
     this.state = {
-      song: null,
       vista: "login"
     }
   }
@@ -33,21 +33,19 @@ class App extends Component {
   }
 
   renderView() {
-
     if (this.state.vista === 'login') {
-
       return <MainPage updateV={(v) => this.UpdateView(v)}/>
     }
     if (this.state.vista === 'selectionView') {
       return <SelectionView updateV={(v) => this.UpdateView(v)}/>
     }
     if (this.state.vista === 'room') {
-      return <Room song={this.state.song.song} user={this.props.currentUser!==null?this.props.currentUser.username:"Guest"} update={(s) => this.UpdateSong(s)} updateV={(v) => this.UpdateView(v)} usuario={this.props.currentUser} saveS={() => this.saveSongsDBsaved()}/>
+      return <Room song={this.props.currentSong.song} user={this.props.currentUser!==null?this.props.currentUser.username:"Guest"} update={(s) => this.UpdateSong(s)} updateV={(v) => this.UpdateView(v)} saveS={() => this.saveSongsDBsaved()}/>
     }
   }
 
   UpdateSong(song) {
-    var id = this.state.song._id;
+    var id = this.props.currentSong._id;
     Meteor.call('session.updateSong',{
       id,
       song
@@ -57,13 +55,13 @@ class App extends Component {
       } else {
         console.log('SessionSong updated');
         var s = SessionDB.findOne(id);
-        this.setState({song: s});
+        this.props.currentSong = s;
       }
     });
   }
 
   saveSongsDBsaved() {
-    var song = this.state.song.song;
+    var song = this.props.currentSong.song;
     var owner = Meteor.userId();
     Meteor.call('saved.addSong',{
       song,
@@ -91,9 +89,10 @@ class App extends Component {
                 console.log(error);
               } else {
                 console.log('SessionSong updated');
+                Session.set('currentSong', id);
                 var s = SessionDB.findOne(id);
+                this.props.currentSong = s;
                 this.setState({
-                  song: s,
                   vista: view
                 });
               }
@@ -115,9 +114,10 @@ class App extends Component {
             console.log(error);
           } else {
             console.log('SessionSong added');
+            Session.set('currentSong', response);
             var s = SessionDB.findOne(response);
+            this.props.currentSong = s;
             this.setState({
-              song: s,
               vista: view
             });
           }
@@ -130,14 +130,25 @@ class App extends Component {
 }
 
 App.propTypes = {
-  songs: PropTypes.array.isRequired,
+  songs: PropTypes.array,
   currentUser: PropTypes.object
 };
 
-export default createContainer((props) => {
+export default createContainer(() => {
   Meteor.subscribe('session');
-  return {
-    songs: SessionDB.find({}).fetch(),
-    currentUser: (Meteor.user())?Meteor.user():{}
-  };
+  var current = Session.get('currentSong');
+  if(current===undefined || current===null) {
+    return {
+      currentSong: null,
+      songs: SessionDB.find({}).fetch(),
+      currentUser: (Meteor.user())?Meteor.user():{}
+    };
+  } else {
+    var s = SessionDB.findOne(current);
+    return {
+      currentSong: s,
+      songs: null,
+      currentUser: (Meteor.user())?Meteor.user():{}
+    };
+  }
 }, App);
