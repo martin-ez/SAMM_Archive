@@ -1,25 +1,29 @@
 .Visualizer
 {
-  width: 25vw;
-  height: 35vh;
+  width: 100%;
+  height: 100%;
+  padding: 1vw;
+  display: grid;
+  grid-template-rows: repeat(3, 1fr);
+}
+
+.Visualizer .tag
+{
+  text-align: center;
+}
+
+.Visualizer .canvasContainer
+{
+  position: relative;
+  bottom: 5vh;
 }
 
 .Visualizer.Drums
 {
-  background-color: #FE0000AA;
+  background-color: rgba(254, 0, 0, 0.25);
 }
 
 .Visualizer.Bass
 {
-  background-color: #011EFEAA;
-}
-
-.Visualizer.Keys
-{
-  background-color: #0BFF01AA;
-}
-
-.Visualizer.Solo
-{
-  background-color: #FE00F6AA;
+  background-color: rgba(0, 30, 254, 0.25);
 }
