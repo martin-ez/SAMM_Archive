@@ -94,7 +94,11 @@ class MainPage extends Component {
                         <input type="email" placeholder="Insert eMail"/>
                         <input type="password" placeholder="Insert Password"/>
                         <button className="form-btn sx back" type="button">Back</button>
-                        <button className="form-btn dx" type="submit">Log In</button>
+                        <button className="form-btn dx" type="submit" onClick={ (event) => {
+                            event.preventDefault();
+                            this.onEnterLogIn()
+                            this.cambiarEstadoApp();
+                        }}>Log In</button>
                     </form>
                 </div>
                 <div className="button-container-1 demo">

@@ -32,6 +32,30 @@ class App extends Component {
     );
   }
 
+<<<<<<< HEAD
+  saveSongsDBsesion() {
+    var user = this.props.currentUser?this.props.currentUser.username:"Guest";
+    if (this.state.song._id) {
+      SongsDBsesion.update(this.state.song._id, {
+        $set: {
+          song: this.state.song
+        }
+      });
+    } else {
+      const _id = SongsDBsesion.insert({
+        song: this.state.song, createdAt: new Date(), // current time
+        owner: Meteor.userId(), // _id of logged in user
+        username: user, // username of logged in user
+      });
+      let newSong = {
+        ...this.state.song
+      };
+      newSong._id = _id;
+      this.setState({song: newSong})
+    }
+  }
+=======
+>>>>>>> f2233503ab43febf67a65816dd2dc2ff934464bf
   renderView() {
 
     if (this.state.vista === 'login') {
