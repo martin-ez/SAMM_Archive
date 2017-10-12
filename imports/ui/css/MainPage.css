@@ -3,7 +3,11 @@
 	height:100vh;
 	background-image: url("fondo1.jpg");
 }
+.error{
 
+	color:darkred;
+	margin-top:  -2vh;
+}
 .MainPage .container{
 	position: absolute;
 	width:auto;
@@ -99,7 +103,7 @@
 }
 
 button.form-btn.sx.back {
-	background-color: rgba(0, 0, 0, 0.15);
+	background-color: rgba(153, 183, 35, 0.65);
 	transition:all 0.3s linear;
 }
 

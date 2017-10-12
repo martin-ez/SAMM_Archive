@@ -31,6 +31,11 @@ class App extends Component {
       </div>
     );
   }
+  // verifySingUp(user){
+  //
+  //   if(this.props.u){
+  //
+  // }}
 
   renderView() {
     if (this.state.vista === 'login') {
@@ -141,7 +146,7 @@ export default createContainer(() => {
     return {
       currentSong: null,
       songs: SessionDB.find({}).fetch(),
-      currentUser: (Meteor.user())?Meteor.user():{}
+      currentUser: (Meteor.user())?Meteor.user():{},
     };
   } else {
     var s = SessionDB.findOne(current);

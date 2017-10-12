@@ -3,6 +3,7 @@ import { Mongo } from 'meteor/mongo';
 
 export const SessionDB = new Mongo.Collection('session');
 
+
 if (Meteor.isServer) {
   // This code only runs on the server
   Meteor.publish('session', ()=>{
