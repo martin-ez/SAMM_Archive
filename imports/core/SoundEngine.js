@@ -111,6 +111,17 @@ export default class SoundEngine {
     }
   }
 
+  ChangeVolume(v, instr) {
+    switch(instr) {
+      case "Drums":
+      this.drums.masterGain.gain.value = v;
+      break;
+      case "Bass":
+      this.bass.masterGain.gain.value = v;
+      break;
+    }
+  }
+
   PlayBGSounds(bar) {
     var s = (60*8) / (this.song.tempo);
     var octave = 4;
