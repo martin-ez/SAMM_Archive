@@ -1,0 +1,10 @@
+SAMM Color Scheme
+
+- Ligth:
+- Medium:
+- Dark:
+
+- Drums/Red: #DF2230
+- Keys/Blue: #107AB3
+- Bass/Green: #11882A
+- Lead/Purple: #791FC6

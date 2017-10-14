@@ -1,8 +1,0 @@
-#Room
-{
-  width: 100vw;
-  height: 100vh;
-  display: grid;
-  grid-template-columns: 4vw repeat(3, 32vw);
-  grid-template-rows: 35vh 65vh;
-}
