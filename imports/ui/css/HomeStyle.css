@@ -1,0 +1,28 @@
+#Home .logoBox
+{
+  display: flex;
+  align-items: center;
+}
+
+#Home .logoBox .content
+{
+  width: 100%;
+}
+
+#Home .logoBox .content .logo
+{
+  padding: 5vw;
+}
+
+#Home .inverted
+{
+  background-color: #181818;
+  color: #E5E5E5;
+  text-align: center;
+}
+
+#Home .inverted span
+{
+  width: 100%;
+  display: block;
+}

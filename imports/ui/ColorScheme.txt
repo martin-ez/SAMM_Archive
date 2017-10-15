@@ -1,8 +1,7 @@
 SAMM Color Scheme
 
-- Ligth:
-- Medium:
-- Dark:
+- Ligth: #E5E5E5
+- Dark: #181818
 
 - Drums/Red: #DF2230
 - Keys/Blue: #107AB3
