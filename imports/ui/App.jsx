@@ -24,6 +24,16 @@ class App extends Component {
     }
   }
 
+  componentDidMount() {
+    auth.onAuthStateChanged((user) => {
+      if (user) {
+        this.setState({
+          user: user
+         });
+      }
+    });
+  }
+
   render() {
     return (
       <div className="app">
@@ -104,7 +114,12 @@ class App extends Component {
   }
 
   Logout() {
-
+    auth.signOut()
+    .then(() => {
+      this.setState({
+        user: null
+      });
+    });
   }
 }
 
