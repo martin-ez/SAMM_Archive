@@ -1,5 +1,6 @@
 import React, {Component} from 'react';
 import PropTypes from 'prop-types';
+import ReactSVG from 'react-svg';
 
 import './css/HomeStyle.css';
 
@@ -36,7 +37,10 @@ class Home extends Component {
           <div className="logo">
             <img src="icons/logo.svg" alt="SAMM's Logo"/>
           </div>
-          <div className="ctaButton"></div>
+          <div className="ctaButton">
+            <h2 className="text fwThin">Make Music</h2>
+            <img className="colors" src="icons/colors.svg" alt=""/>
+          </div>
         </div>
       </div>
     );
@@ -47,9 +51,18 @@ class Home extends Component {
       <div className="box inverted">
         <span>
           <h2 className="fwThin">Social Adaptable Music Maker</h2>
+          <br/>
           <p>
-            Lorem Ipsum
+            Create songs with strangers, without any need of music theory.
+            Have fun jamming out with one of four different instruments.
+            <br/><br/>
+            Create an account to be able to save your songs.
+            Or log in if you already have an account.
           </p>
+          <div className="logButtons">
+            <div className="button"><h2>Sign Up</h2></div>
+            <div className="button"><h2>Log In</h2></div>
+          </div>
         </span>
       </div>
     );
