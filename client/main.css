@@ -22,47 +22,27 @@ body
  /* Fonts Setup */
 /*-------------*/
 
-/*Main Font*/
-h1, h2, h3, h4, h5, h6, li, p
+h1
 {
   font-family: 'Raleway', sans-serif;
-}
-
-/*Especific*/
-.fontDots
-{
-  font-family: 'Raleway Dots', sans-serif;
-}
-
-.fontCursive
-{
-  font-family: 'Lobster', sans-serif;
-}
-
-.fontSerif
-{
-  font-family: 'Josefin Slab', serif;
-}
-
-.fontSimple
-{
-  font-family: 'Open Sans', sans-serif;
-}
-
-/*Font Weigths*/
-.fwThin
-{
   font-weight: 100;
+  text-align: center;
+  font-size: 2.75vw;
 }
 
-.fwMedium
+h2
 {
-  font-weight: 400
+  font-family: 'Raleway', sans-serif;
+  font-weight: 400;
+  text-align: justify;
 }
 
-.fwBold
+p
 {
-  font-weight: 700:
+  font-family: 'Droid Serif', serif;
+  font-weight: 400;
+  text-align: justify;
+  letter-spacing: 0.02rem;
 }
 
   /*-----------------------*/

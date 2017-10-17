@@ -1,41 +1,57 @@
 import React, {Component} from 'react';
 import PropTypes from 'prop-types';
 
+import firebase, { auth, provider } from '../auth/firebase.js';
 import {Meteor} from 'meteor/meteor';
 import {Session} from 'meteor/session';
 import {createContainer} from 'meteor/react-meteor-data';
 import {SessionDB} from '../api/SessionSongs.js';
 import {SavedDB} from '../api/SavedSongs.js';
 
+import NavBar from './NavBar.jsx';
 import Home from './Home.jsx';
-import Login from './Login.jsx';
 import Room from './Room.jsx';
 
 // App component - represents the whole app
 class App extends Component {
   constructor(props) {
     super(props);
+    this.Login = this.Login.bind(this);
+    this.Logout = this.Logout.bind(this);
     this.state = {
-      view: "home"
+      view: "home",
+      user: null
     }
   }
 
   render() {
-    if (this.state.view === 'home') {
+    return (
+      <div className="app">
+        {this.RenderNavBar()}
+        {this.RenderPage()}
+      </div>
+    );
+  }
+
+  RenderNavBar() {
+    if(this.state.view === 'home') {
       return (
-        <Home updateView={(v) => this.UpdateView(v)}/>
+        <NavBar user={this.state.user} logout={this.Logout} />
       );
     }
-    if (this.state.view === 'login') {
+  }
+
+  RenderPage() {
+    if (this.state.view === 'home') {
       return (
-        <Login updateView={(v) => this.UpdateView(v)}/>
+        <Home updateView={(v) => this.UpdateView(v)} login={this.Login} user={this.state.user}/>
       );
     }
     if (this.state.view === 'room') {
       return (
         <Room session={true}
         song={this.props.currentSong.song}
-        user={this.props.currentUser !== null ? this.props.currentUser.username : "Guest"}
+        user={this.state.user}
         update={(s) => this.UpdateSessionSong(s)}
         saveSong={() => this.SaveSong()}/>
       );
@@ -76,11 +92,25 @@ class App extends Component {
       }
     });
   }
+
+  Login() {
+  auth.signInWithPopup(provider)
+    .then((result) => {
+      const user = result.user;
+      this.setState({
+        user: user
+      });
+    });
+  }
+
+  Logout() {
+
+  }
 }
 
 App.propTypes = {
-  songs: PropTypes.array,
-  currentUser: PropTypes.object
+  currentSong: PropTypes.object,
+  songs: PropTypes.array
 };
 
 export default createContainer(() => {
@@ -89,19 +119,13 @@ export default createContainer(() => {
   if (current === undefined || current === null) {
     return {
       currentSong: null,
-      songs: SessionDB.find({}).fetch(),
-      currentUser: (Meteor.user())
-        ? Meteor.user()
-        : {}
+      songs: SessionDB.find({}).fetch()
     };
   } else {
     var s = SessionDB.findOne(current);
     return {
       currentSong: s,
-      songs: null,
-      currentUser: (Meteor.user())
-        ? Meteor.user()
-        : {}
+      songs: null
     };
   }
 }, App);

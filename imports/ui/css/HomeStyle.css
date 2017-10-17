@@ -44,31 +44,12 @@
   background-position: center 200px;
 }
 
-#Home .logoBox .content .ctaButton h2
-{
-  width: 100%;
-  font-size: 4.2vw;
-  text-align: center;
-}
-
 #Home .inverted
 {
   background-color: #181818;
-  color: #E5E5E5;
+  color: #808080;
   display: flex;
   align-items: center;
-}
-
-#Home .inverted h2
-{
-  font-size: 3vw;
-  text-align: center;
-}
-
-#Home .inverted p
-{
-  font-size: 1.5vw;
-  text-align: justify;
 }
 
 #Home .inverted span
@@ -78,28 +59,33 @@
   display: block;
 }
 
-#Home .inverted .logButtons
+#Home .inverted p
 {
-  margin-top: 10vh;
-  color: #181818;
-  grid-gap: 3vw;
-  width: 100%;
-  height: 10vh;
-  display: grid;
-  grid-template-columns: 1fr 1fr;
+  font-size: 1.5vw;
 }
 
-#Home .inverted .logButtons .button
+#Home .inverted h2
+{
+  font-size: 1.75vw;
+  color: #E5E5E5;
+}
+
+#Home .inverted .login
 {
   cursor: pointer;
+  margin-top: 10vh;
+  background-color: #E5E5E5;
+  position: relative;
+  left: calc(50% - 10vw);
+  width: 20vw;
+  height: 10vh;
   display: flex;
   align-items: center;
-  background-color: #E5E5E5;
 }
 
-#Home .inverted .logButtons .button h2
+#Home .inverted .login h2
 {
   width: 100%;
   text-align: center;
-  font-size: 2vw;
+  color: #181818;
 }

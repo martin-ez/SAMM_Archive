@@ -4,9 +4,13 @@ import ReactSVG from 'react-svg';
 
 import './css/HomeStyle.css';
 
-const homeLayout = {
+const homeLayoutLarge = {
   display: 'grid',
   gridTemplateColumns: '55vw 45vw'
+};
+
+const homeLayoutMobile = {
+  marginTop: '7.5vh'
 };
 
 class Home extends Component {
@@ -15,13 +19,13 @@ class Home extends Component {
     return (
       <div>
         <MediaQuery query='(min-device-width: 1224px)'>
-          <div id="Home" className="page" style={homeLayout}>
+          <div id="Home" className="page" style={homeLayoutLarge}>
             {this.RenderLogo()}
             {this.RenderText()}
           </div>
         </MediaQuery>
         <MediaQuery query='(max-device-width: 1224px)'>
-          <div id="Home" className="page">
+          <div id="Home" className="page" style={homeLayoutMobile}>
             {this.RenderLogo()}
             {this.RenderText()}
           </div>
@@ -37,8 +41,8 @@ class Home extends Component {
           <div className="logo">
             <img src="icons/logo.svg" alt="SAMM's Logo"/>
           </div>
-          <div className="ctaButton">
-            <h2 className="text fwThin">Make Music</h2>
+          <div className="ctaButton button">
+            <h1 className="text fwThin">Make Music</h1>
             <img className="colors" src="icons/colors.svg" alt=""/>
           </div>
         </div>
@@ -47,30 +51,44 @@ class Home extends Component {
   }
 
   RenderText() {
-    return (
-      <div className="box inverted">
-        <span>
-          <h2 className="fwThin">Social Adaptable Music Maker</h2>
-          <br/>
-          <p>
-            Create songs with strangers, without any need of music theory.
-            Have fun jamming out with one of four different instruments.
-            <br/><br/>
-            Create an account to be able to save your songs.
-            Or log in if you already have an account.
-          </p>
-          <div className="logButtons">
-            <div className="button"><h2>Sign Up</h2></div>
-            <div className="button"><h2>Log In</h2></div>
-          </div>
-        </span>
-      </div>
-    );
+    if(this.props.user === null)
+    {
+      return (
+        <div className="box inverted">
+          <span>
+            <h1>Social Adaptable Music Maker</h1>
+            <br/>
+            <h2>What is SAMM?</h2>
+            <br/>
+            <p>
+              It's a place where you can create music with total strangers. You
+              don't need to know any music theory, just have fun jamming out.
+            </p>
+            <br/>
+            <h2>How can I use it?</h2>
+            <br/>
+            <p>
+              Click the "Make Music" button to start creating. You can also log in
+              to be able to save songs.
+            </p>
+            <div className="login" onClick={this.props.login}>
+              <h2>Log In</h2>
+            </div>
+          </span>
+        </div>
+      );
+    } else {
+      return (
+        <div className="box inverted"></div>
+      );
+    }
   }
 }
 
 Home.propTypes = {
-  updateView: PropTypes.func.isRequired
+  updateView: PropTypes.func.isRequired,
+  login: PropTypes.func.isRequired,
+  user: PropTypes.object
 }
 
 export default Home;
