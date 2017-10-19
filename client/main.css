@@ -5,6 +5,7 @@
 {
   box-sizing: border-box;
   margin: 0;
+  border: 0;
   padding: 0;
 }
 
@@ -35,6 +36,7 @@ h2
   font-family: 'Raleway', sans-serif;
   font-weight: 400;
   text-align: justify;
+  font-size: 2.25vw;
 }
 
 p
@@ -43,6 +45,7 @@ p
   font-weight: 400;
   text-align: justify;
   letter-spacing: 0.02rem;
+  font-size: 1.75vw;
 }
 
   /*-----------------------*/

@@ -44,11 +44,9 @@ class App extends Component {
   }
 
   RenderNavBar() {
-    if(this.state.view === 'home') {
-      return (
-        <NavBar user={this.state.user} logout={this.Logout} />
-      );
-    }
+    return (
+      <NavBar user={this.state.user} logout={this.Logout} />
+    );
   }
 
   RenderPage() {
