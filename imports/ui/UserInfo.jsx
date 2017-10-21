@@ -21,7 +21,7 @@ class UserInfo extends Component {
             <p>0</p>
           </div>
           <div className="favInstr">
-            <h2>FavoriteInstr</h2>
+            <h2>FavInstr</h2>
             <p>Bass</p>
           </div>
         </div>

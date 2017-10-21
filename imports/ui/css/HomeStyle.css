@@ -78,12 +78,12 @@
 #Home .logoBox .content .ctaContainer .ctaButton:not(:hover)
 {
   top: 0;
-  border-top: 0.5vh solid #303030;
+  border-top: 0.3vw solid #303030;
 }
 
 #Home .logoBox .content .ctaContainer .ctaButton:hover
 {
-  top: -0.25vh;
+  top: -0.25vw;
   border-top: none;
 }
 

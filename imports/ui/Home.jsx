@@ -51,7 +51,10 @@ class Home extends Component {
             <img src="icons/logo.svg" alt="SAMM's Logo"/>
           </div>
           <div className="ctaContainer">
-            <button className="ctaButton" onMouseEnter={() => this.ButtonOnEnterAnimation()} onMouseLeave={() => this.ButtonOnLeaveAnimation()}>
+            <button className="ctaButton"
+              onMouseEnter={() => this.ButtonOnEnterAnimation()}
+              onMouseLeave={() => this.ButtonOnLeaveAnimation()}
+              onClick={() => this.props.updateView('room')}>
               <svg id="ctaColors" xmlns="http://www.w3.org/2000/svg" width="100%" height="100%">
                 <g ref={(b) => (this.colors = b)} id="colorsGroup">
                   <rect x="00%" width="25%" height="10%" fill="#DF2230"/>
@@ -105,7 +108,7 @@ class Home extends Component {
 
   ButtonOnEnterAnimation() {
     let tl = new TimelineLite();
-    tl.staggerTo(this.colorsRef, 0.5, {y: "0%", ease: Sine.easeInOut}, 0.1);
+    tl.staggerTo(this.colorsRef, 0.5, {y: "0%", ease: Sine.easeInOut}, 0.1);;
   }
 
   ButtonOnLeaveAnimation() {

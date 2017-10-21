@@ -1,15 +1,14 @@
 import React, {Component} from 'react';
 import PropTypes from 'prop-types';
 
-import firebase, { auth, provider } from '../auth/firebase.js';
 import {Meteor} from 'meteor/meteor';
 import {Session} from 'meteor/session';
 import {createContainer} from 'meteor/react-meteor-data';
-import {StatsDB} from '../api/UserStats.js';
 import {SessionDB} from '../api/SessionSongs.js';
 import {SavedDB} from '../api/SavedSongs.js';
+import {StatsDB} from '../api/UserStats.js';
+import firebase, { auth, provider } from '../auth/firebase.js';
 
-import NavBar from './NavBar.jsx';
 import Home from './Home.jsx';
 import Room from './Room.jsx';
 
@@ -21,6 +20,7 @@ class App extends Component {
     this.Logout = this.Logout.bind(this);
     this.state = {
       view: "home",
+      song: this.props.currentSong,
       user: null,
       userStats: null
     }
@@ -30,9 +30,7 @@ class App extends Component {
     auth.onAuthStateChanged((user) => {
       if (user) {
         //this.InitUser(user);
-        this.setState({
-          user: user
-        });
+        this.setState({user:user});
       }
     });
   }
@@ -93,8 +91,8 @@ class App extends Component {
       return (
         <Room
         session={true}
-        song={this.props.currentSong.song}
-        user={this.state.user}
+        song={this.state.song.song}
+        user={this.state.user?this.state.user.displayName.split(" ")[0]:"guest"}
         update={(s) => this.UpdateSessionSong(s)}
         saveSong={() => this.SaveSong()}/>
       );
@@ -102,11 +100,60 @@ class App extends Component {
   }
 
   UpdateView(newView) {
-    this.setState({view: newView});
+    if(newView==='room' && this.state.song===null) {
+      var end = false;
+      if (this.props.songs.length !== 0) {
+        for (var i = 0; i < this.props.songs.length && !end; i++) {
+          if (this.props.songs[i].noUsers < 2) {
+            var id = this.props.songs[i]._id;
+            Meteor.call('session.addUser',{
+              id
+            }, (error, response) =>{
+              if (error) {
+                console.log(error);
+              } else {
+                console.log('SessionSong updated');
+                Session.set('currentSong', id);
+                var s = SessionDB.findOne(id);
+                this.setState({
+                  song: s,
+                  view: newView
+                });
+              }
+            });
+            end = true;
+          }
+        }
+      }
+      if (!end) {
+        import SongGenerator from '../core/SongGenerator.js';
+        var songGenerator = new SongGenerator();
+        var song = songGenerator.CreateNewSong();
+        var noUsers = 1;
+        Meteor.call('session.addSong',{
+          song,
+          noUsers
+        }, (error, response) => {
+          if (error) {
+            console.log(error);
+          } else {
+            console.log('SessionSong added');
+            Session.set('currentSong', response);
+            var s = SessionDB.findOne(response);
+            this.setState({
+              song: s,
+              view: newView
+            });
+          }
+        });
+      }
+    } else {
+      this.setState({view: newView});
+    }
   }
 
   UpdateSessionSong(song) {
-    var id = this.props.currentSong._id;
+    var id = this.state.song._id;
     Meteor.call('session.updateSong', {
       id,
       song
@@ -116,13 +163,15 @@ class App extends Component {
       } else {
         console.log('SessionSong updated');
         var s = SessionDB.findOne(id);
-        this.props.currentSong = s;
+        this.setState({
+          song: s
+        });
       }
     });
   }
 
   SaveSong() {
-    var song = this.props.currentSong.song;
+    var song = this.state.song.song;
     var owner = Meteor.userId();
     Meteor.call('saved.addSong', {
       song,
@@ -149,9 +198,7 @@ class App extends Component {
     .then((result) => {
       const user = result.user;
       //this.InitUser(user);
-      this.setState({
-        user: user
-      });
+      this.setState({user:user});
     });
   }
 

@@ -57,3 +57,15 @@ p
   width: 100vw;
   height: 100vh;
 }
+
+.instrumentUILarge
+{
+  width: 100vh;
+  height: 100vh;
+}
+
+.instrumentUISmall
+{
+  width: 100vw;
+  height: 100vw;
+}
