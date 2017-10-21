@@ -1,10 +1,12 @@
 import React, {Component} from 'react';
 import PropTypes from 'prop-types';
 
+import './css/UserInfoStyle.css';
+
 class UserInfo extends Component {
   render() {
     return (
-      <div id="HomeInfo" className="infoPage">
+      <div id="UserInfo" className="infoPage">
         <div className="userImg">
           <img src={this.props.user.photoURL} alt={this.props.user.displayName+"'s profile image"}/>
         </div>
@@ -25,7 +27,7 @@ class UserInfo extends Component {
         </div>
         <div className="loadSong">
           <button>
-            See saved songs
+            <h2>Load saved song</h2>
           </button>
         </div>
       </div>

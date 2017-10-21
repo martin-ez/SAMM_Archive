@@ -1,5 +1,7 @@
 import React, {Component} from 'react';
 
+import './css/HomeInfoStyle.css';
+
 class HomeInfo extends Component {
   render() {
     return (

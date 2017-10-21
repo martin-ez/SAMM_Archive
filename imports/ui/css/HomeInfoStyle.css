@@ -1,0 +1,25 @@
+#HomeInfo
+{
+  width: 100%;
+  height: 100%;
+  display: flex;
+  align-items: center;
+}
+
+#HomeInfo span
+{
+  padding: 2vw;
+  width: 100%;
+  display: block;
+}
+
+#HomeInfo span p
+{
+  font-size: 1.5vw;
+}
+
+#HomeInfo span h2
+{
+  font-size: 1.75vw;
+  color: #E5E5E5;
+}

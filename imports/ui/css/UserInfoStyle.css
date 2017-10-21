@@ -1,0 +1,79 @@
+#UserInfo
+{
+  padding-top: 4vw;
+}
+
+#UserInfo h2
+{
+  font-size: 1.75vw;
+  color: #E5E5E5;
+}
+
+#UserInfo .userImg
+{
+  margin-bottom: 1vh;
+  height: 30vh;
+  width: 100%;
+  text-align: center;
+}
+
+#UserInfo .userImg img
+{
+  max-height: 100%;
+  max-width: 100%;
+  border-radius: 50%;
+  border: 5px solid #E5E5E5;
+}
+
+#UserInfo .userStats
+{
+  margin-top: 3vh;
+  width: 100%;
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+}
+
+#UserInfo .userStats *
+{
+  text-align: center;
+  margin-top: 0.5vh;
+}
+
+#UserInfo .userStats div
+{
+  border-right: 1px solid #E5E5E5;
+}
+
+#UserInfo .userStats .favInstr
+{
+  border-right: none;
+}
+
+#UserInfo .loadSong
+{
+  width: 100%;
+  padding: 2vw;
+}
+
+#UserInfo .loadSong button
+{
+  cursor: pointer;
+  margin-top: 10vh;
+  width: 20vw;
+  height: 10vw;
+  position: relative;
+  left: calc(50% - 10vw);
+  background-color: transparent;
+  border: 2px solid #808080;
+}
+
+#UserInfo .loadSong button h2
+{
+  color: #808080;
+  text-align: center;
+}
+
+#UserInfo .loadSong button:hover
+{
+  background-color: #242424;
+}

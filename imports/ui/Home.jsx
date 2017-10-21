@@ -86,7 +86,7 @@ class Home extends Component {
         <div className="box inverted">
           <div className="logButton">
             <button onClick={() => this.props.login()}>
-              <h2>Log out</h2>
+              <h2>log out</h2>
             </button>
           </div>
           <UserInfo user={this.props.user} stats={this.props.stats}/>
