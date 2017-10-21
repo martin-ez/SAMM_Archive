@@ -5,6 +5,7 @@ import firebase, { auth, provider } from '../auth/firebase.js';
 import {Meteor} from 'meteor/meteor';
 import {Session} from 'meteor/session';
 import {createContainer} from 'meteor/react-meteor-data';
+import {StatsDB} from '../api/UserStats.js';
 import {SessionDB} from '../api/SessionSongs.js';
 import {SavedDB} from '../api/SavedSongs.js';
 
@@ -20,44 +21,78 @@ class App extends Component {
     this.Logout = this.Logout.bind(this);
     this.state = {
       view: "home",
-      user: null
+      user: null,
+      userStats: null
     }
   }
 
   componentDidMount() {
     auth.onAuthStateChanged((user) => {
       if (user) {
+        //this.InitUser(user);
         this.setState({
           user: user
-         });
+        });
       }
     });
+  }
+
+  InitUser(user) {
+    if(user!== null && user!== undefined) {
+      let email = user.email;
+      let savedStats = StatsDB.findOne({email:email});
+      if(savedStats === undefined) {
+        let noSession = 0;
+        let noSaved = 0;
+        let favInstr = '-';
+        Meteor.call('userStats.addUser',{
+          email,
+          noSession,
+          noSaved,
+          favInstr
+        }, (error, response) => {
+          if (error) {
+            console.log(error);
+          } else {
+            console.log('UserStats added');
+            let u = StatsDB.findOne({_id:response});
+            this.setState({
+              user: user,
+              userStats: u
+            });
+          }
+        });
+      } else {
+        this.setState({
+          user: user,
+          userStats: savedStats
+        });
+      }
+    }
   }
 
   render() {
     return (
       <div className="app">
-        {this.RenderNavBar()}
         {this.RenderPage()}
       </div>
-    );
-  }
-
-  RenderNavBar() {
-    return (
-      <NavBar user={this.state.user} logout={this.Logout} />
     );
   }
 
   RenderPage() {
     if (this.state.view === 'home') {
       return (
-        <Home updateView={(v) => this.UpdateView(v)} login={this.Login} user={this.state.user}/>
+        <Home
+          updateView={(v) => this.UpdateView(v)}
+          login={() => this.Log()}
+          user={this.state.user}
+          stats={this.state.userStats} />
       );
     }
     if (this.state.view === 'room') {
       return (
-        <Room session={true}
+        <Room
+        session={true}
         song={this.props.currentSong.song}
         user={this.state.user}
         update={(s) => this.UpdateSessionSong(s)}
@@ -101,10 +136,19 @@ class App extends Component {
     });
   }
 
+  Log() {
+    if(this.state.user) {
+      this.Logout();
+    } else {
+      this.Login();
+    }
+  }
+
   Login() {
   auth.signInWithPopup(provider)
     .then((result) => {
       const user = result.user;
+      //this.InitUser(user);
       this.setState({
         user: user
       });
@@ -115,7 +159,8 @@ class App extends Component {
     auth.signOut()
     .then(() => {
       this.setState({
-        user: null
+        user: null,
+        userStats: null
       });
     });
   }

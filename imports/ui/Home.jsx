@@ -3,6 +3,9 @@ import PropTypes from 'prop-types';
 
 import {TweenMax, Power2, TimelineLite} from 'gsap';
 
+import HomeInfo from './HomeInfo.jsx';
+import UserInfo from './UserInfo.jsx';
+
 import './css/HomeStyle.css';
 
 const homeLayoutLarge = {
@@ -24,13 +27,13 @@ class Home extends Component {
     var MediaQuery = require('react-responsive');
     return (
       <div>
-        <MediaQuery query='(min-device-width: 1224px)'>
+        <MediaQuery query='(min-width: 800px)'>
           <div id="Home" className="page" style={homeLayoutLarge}>
             {this.RenderLogo()}
             {this.RenderText()}
           </div>
         </MediaQuery>
-        <MediaQuery query='(max-device-width: 1224px)'>
+        <MediaQuery query='(max-width: 800px)'>
           <div id="Home" className="page" style={homeLayoutMobile}>
             {this.RenderLogo()}
             {this.RenderText()}
@@ -70,56 +73,23 @@ class Home extends Component {
     {
       return (
         <div className="box inverted">
-          <span>
-            <h1>Social Adaptable Music Maker</h1>
-            <br/>
-            <h2>What is SAMM?</h2>
-            <br/>
-            <p>
-              It's a place where you can create music with total strangers. You
-              don't need to know any music theory, just have fun jamming out.
-            </p>
-            <br/>
-            <h2>How can I use it?</h2>
-            <br/>
-            <p>
-              Click the "Make Music" button to start creating. You can also log in
-              to be able to save songs.
-            </p>
-          </span>
+          <div className="logButton">
+            <button onClick={() => this.props.login()}>
+              <h2>Log in</h2>
+            </button>
+          </div>
+          <HomeInfo />
         </div>
       );
     } else {
       return (
         <div className="box inverted">
           <div className="logButton">
-            <button>
+            <button onClick={() => this.props.login()}>
               <h2>Log out</h2>
             </button>
           </div>
-          <div className="userImg">
-            <img src={this.props.user.photoURL} alt={this.props.user.displayName+"'s profile image"}/>
-          </div>
-          <h1>{this.props.user.displayName}</h1>
-          <div className="userStats">
-            <div className="sessionSong">
-              <h2>SessionSongs</h2>
-              <p>12</p>
-            </div>
-            <div className="savedSong">
-              <h2>SavedSongs</h2>
-              <p>12</p>
-            </div>
-            <div className="favInstr">
-              <h2>FavoriteInstr</h2>
-              <p>Bass</p>
-            </div>
-          </div>
-          <div className="loadSong">
-            <button>
-              See saved songs
-            </button>
-          </div>
+          <UserInfo user={this.props.user} stats={this.props.stats}/>
         </div>
       );
     }
@@ -147,7 +117,8 @@ class Home extends Component {
 Home.propTypes = {
   updateView: PropTypes.func.isRequired,
   login: PropTypes.func.isRequired,
-  user: PropTypes.object
+  user: PropTypes.object,
+  stats: PropTypes.object
 }
 
 export default Home;
