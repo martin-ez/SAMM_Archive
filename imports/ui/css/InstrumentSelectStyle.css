@@ -1,23 +1,23 @@
 #InstrSelect .label
 {
   position: relative;
-  top: 8vw;
+  top: 8vh;
 }
 
 #InstrSelect .instruments
 {
   position: absolute;
-  left: 25vw;
-  top: 10vw;
-  width: 50vw;
-  height: 50vw;
+  left: 30vw;
+  top: 10vh;
+  width: 40vw;
+  height: 40vw;
 }
 
 #InstrSelect .instruments .instr
 {
   position: absolute;
-  width: 17.5vw;
-  height: 17.5vw;
+  width: 14vw;
+  height: 14vw;
   background-color: transparent;
   display: flex;
   align-items: center;

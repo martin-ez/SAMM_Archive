@@ -6,6 +6,8 @@ import SoundEngine from '../core/SoundEngine.js';
 import InstrumentSelect from './InstrumentSelect.jsx';
 import Drums from './Drums.jsx';
 
+import './css/RoomStyle.css';
+
 class Room extends Component {
   constructor(props) {
     super(props);
@@ -58,6 +60,9 @@ class Room extends Component {
   }
 
   SelectInstrument(instrument) {
+    var song = this.props.song;
+    song[instrument].user = this.props.user;
+    this.props.update(song);
     this.setState({
       view: "Instrument",
       instrument: instrument,
@@ -72,7 +77,7 @@ class Room extends Component {
       );
     } else {
       return (
-        <div id="Room" className="page">
+        <div id="Room" className={"page "+this.state.instrument}>
           {this.RenderInstrument()}
           {this.RenderControls()}
         </div>
@@ -84,7 +89,7 @@ class Room extends Component {
     switch(this.state.instrument) {
       case "drums":
       return (
-        <Drums pattern={this.props.song.drums}/>
+        <Drums pattern={this.props.song.drums} beat={this.state.beat} update={(p) => this.UpdatePattern(p, "drums")}/>
       );
       break;
       case "bass":
@@ -98,6 +103,12 @@ class Room extends Component {
 
   RenderControls() {
 
+  }
+
+  UpdatePattern(pattern, instrument) {
+    var song = this.props.song;
+    song[instrument] = pattern;
+    this.props.update(song);
   }
 }
 
