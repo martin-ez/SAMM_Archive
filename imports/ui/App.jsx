@@ -92,7 +92,7 @@ class App extends Component {
         <Room
         session={true}
         song={this.state.song.song}
-        user={this.state.user?this.state.user.displayName.split(" ")[0]:"guest"}
+        user={this.state.user?this.state.user.displayName.split(" ")[0]:"Guest"}
         update={(s) => this.UpdateSessionSong(s)}
         saveSong={() => this.SaveSong()}/>
       );

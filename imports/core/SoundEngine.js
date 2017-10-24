@@ -2,7 +2,6 @@ let songInstance = null;
 import { MonoSynth } from 'synth-kit'
 import { Octavian, Note } from 'octavian';
 import SoundLoader from './SoundLoader.js';
-import Visualizer from './Visualizer.js';
 
 export default class SoundEngine {
   constructor(newSong) {
@@ -89,37 +88,8 @@ export default class SoundEngine {
     }
   }
 
-  CreateVisualizer(canvas, instrument) {
-    var v = new Visualizer();
-    switch(instrument) {
-      case "Drums":
-      var analyser = v.InitializeAnalyser(this.context, canvas, '#FE0000');
-      if(!this.drums.analyser) this.drums.analyser = analyser;
-      break;
-      case "Bass":
-      var analyser = v.InitializeAnalyser(this.context, canvas, '#011EFE');
-      if(!this.bass.analyser) this.bass.analyser = analyser;
-      break;
-      case "Keys":
-      var analyser = v.InitializeAnalyser(this.context, canvas, '#0BFF01');
-      if(!this.keys.analyser) this.keys.analyser = analyser;
-      break;
-      case "Solo":
-      var analyser = v.InitializeAnalyser(this.context, canvas, '#FE00F6');
-      if(!this.solo.analyser) this.solo.analyser = analyser;
-      break;
-    }
-  }
-
   ChangeVolume(v, instr) {
-    switch(instr) {
-      case "Drums":
-      this.drums.masterGain.gain.value = v;
-      break;
-      case "Bass":
-      this.bass.masterGain.gain.value = v;
-      break;
-    }
+    this[instr].masterGain.gain.value = v;
   }
 
   PlayBGSounds(bar) {
@@ -181,14 +151,13 @@ export default class SoundEngine {
 
   GetNoteBar(rootNote, bar) {
     var note = rootNote;
-    var minor = this.song.progression[0] < 0;
     var chord = Math.abs(this.song.progression[bar]);
     switch(chord) {
       case 2:
       note = note.majorSecond();
       break;
       case 3:
-      if(!minor) {
+      if(!this.song.minor) {
         note = note.majorThird();
       } else {
         note = note.minorThird();
@@ -201,14 +170,14 @@ export default class SoundEngine {
       note = note.perfectFifth();
       break;
       case 6:
-      if(!minor) {
+      if(!this.song.minor) {
         note = note.majorSixth();
       } else {
         note = note.minorSixth();
       }
       break;
       case 7:
-      if(!minor) {
+      if(!this.song.minor) {
         note = note.majorSeventh();
       } else {
         note = note.minorSeventh();
@@ -237,13 +206,12 @@ export default class SoundEngine {
     if(interval === 0.5) {
       return note;
     }
-    var minor = this.song.progression[bar] < 0;
     switch(interval) {
       case 0:
       note = note.downOctave();
       break;
       case 0.125:
-      if(!minor) {
+      if(!this.song.minor) {
         note = note.majorThird().downOctave();
       } else {
         note = note.minorThird().downOctave();
@@ -254,14 +222,14 @@ export default class SoundEngine {
       note = note.perfectFifth().downOctave();
       break;
       case 0.375:
-      if(!minor) {
+      if(!this.song.minor) {
         note = note.majorSixth().downOctave();
       } else {
         note = note.minorSeventh().downOctave();
       }
       break;
       case 0.625:
-      if(!minor) {
+      if(!this.song.minor) {
         note = note.majorThird();
       } else {
         note = note.minorThird();
@@ -271,7 +239,7 @@ export default class SoundEngine {
       note = note.perfectFifth();
       break;
       case 0.875:
-      if(!minor) {
+      if(!this.song.minor) {
         note = note.majorSixth();
       } else {
         note = note.minorSeventh();

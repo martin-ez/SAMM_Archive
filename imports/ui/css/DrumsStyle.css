@@ -21,7 +21,7 @@
 
 #DrumsModule .pad.active:hover
 {
-  fill: #4C4C4C;
+  fill: #282828;
 }
 
 #DrumsModule .control:not(.active)

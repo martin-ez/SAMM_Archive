@@ -5,7 +5,9 @@ SongGenerator.prototype.CreateNewSong = function() {
   var newSong = {
     tempo: 0,
     key: "",
+    minor: false,
     progression: [],
+    progressionName: [],
     band: "",
     drums: {
       user: "",
@@ -34,6 +36,8 @@ SongGenerator.prototype.CreateNewSong = function() {
   var keys = ['A', 'A#', 'B', 'C', 'C#', 'D', 'D#', 'E', 'F', 'F#', 'G', 'G#'];
   newSong.key = keys[Math.floor(Math.random() * keys.length)];
   newSong.progression = this.CreateProgression();
+  newSong.minor = newSong.progression[0] < 0;
+  newSong.progressionName = this.ConvertProgression(newSong.progression, newSong.key, newSong.minor);
   newSong.band = this.CreateBandName();
   return newSong;
 }
@@ -55,6 +59,48 @@ SongGenerator.prototype.CreateProgression = function() {
   ];
 
   return progressions[Math.floor(Math.random() * progressions.length)];
+}
+
+SongGenerator.prototype.ConvertProgression = function(progression, key, minor) {
+  import { Octavian, Note } from 'octavian';
+  var rootStr = key+"4";
+  return progression.map(function(c, bar){
+    var note = new Note(rootStr);
+    var chord = Math.abs(progression[bar]);
+    switch(chord) {
+      case 2:
+      note = note.majorSecond();
+      break;
+      case 3:
+      if(!minor) {
+        note = note.majorThird();
+      } else {
+        note = note.minorThird();
+      }
+      break;
+      case 4:
+      note = note.perfectFourth();
+      break;
+      case 5:
+      note = note.perfectFifth();
+      break;
+      case 6:
+      if(!minor) {
+        note = note.majorSixth();
+      } else {
+        note = note.minorSixth();
+      }
+      break;
+      case 7:
+      if(!minor) {
+        note = note.majorSeventh();
+      } else {
+        note = note.minorSeventh();
+      }
+      break;
+    }
+    return note.letter+(note.modifier?"#":"")+(c<0?"m":"");
+  });
 }
 
 SongGenerator.prototype.CreateBandName = function() {

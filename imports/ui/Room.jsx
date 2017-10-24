@@ -4,6 +4,7 @@ import PropTypes from 'prop-types';
 import SoundEngine from '../core/SoundEngine.js';
 
 import InstrumentSelect from './InstrumentSelect.jsx';
+import Player from './Player.jsx';
 import Drums from './Drums.jsx';
 import Bass from './Bass.jsx';
 
@@ -72,6 +73,7 @@ class Room extends Component {
   }
 
   render() {
+    var MediaQuery = require('react-responsive');
     if(this.state.view === "InstrumentSelect") {
       return (
         <InstrumentSelect
@@ -80,9 +82,19 @@ class Room extends Component {
       );
     } else {
       return (
-        <div id="Room" className={"page "+this.state.instrument}>
-          {this.RenderInstrument()}
-          {this.RenderControls()}
+        <div>
+          <MediaQuery query='(min-width: 800px)'>
+            <div id="Room" className={"page large "+this.state.instrument}>
+              {this.RenderInstrument()}
+              {this.RenderControls()}
+            </div>
+          </MediaQuery>
+          <MediaQuery query='(max-width: 800px)'>
+            <div id="Room" className={"page mobile "+this.state.instrument}>
+              {this.RenderInstrument()}
+              {this.RenderControls()}
+            </div>
+          </MediaQuery>
         </div>
       );
     }
@@ -114,7 +126,12 @@ class Room extends Component {
   }
 
   RenderControls() {
-
+    return (
+      <Player
+        bar={this.state.bar}
+        song={this.props.song}
+        save={this.props.user!=="Guest"}/>
+    );
   }
 
   UpdatePattern(pattern, instrument) {

@@ -43,11 +43,11 @@ class Drums extends Component {
           <path className="beatSelector" fill="#E5E5E5" transform={"rotate("+(22.5 * this.props.beat)+" 50 50)"} d="M40.3,1l5,24.6c1.5-0.3,2.7-0.5,4.9-0.5c2.1,0,3.3,0.2,4.7,0.5c1.6-7.9,3.4-16.8,5-24.6C57.2,0.4,54,0,50,0S43.1,0.4,40.3,1z"/>
         </g>
         <g id="controls">
-          <g onMouseEnter={this.state.controls===0?"":(() => this.ControlHover(0))}
+          <g className={"control"+(this.state.controls===0?" active":"")}
+            onMouseEnter={this.state.controls===0?"":(() => this.ControlHover(0))}
             onMouseLeave={() => this.ControlHoverLeave()}
             onClick={() => this.SelectControl(0)}>
-            <polygon className={"control"+(this.state.controls===0?" active":"")}
-              fill={this.state.controls===0?"#4C4C4C":(this.state.selector===0?"#4C4C4C":"#808080")}
+            <polygon fill={this.state.controls===0?"#282828":(this.state.selector===0?"#282828":"#181818")}
               points="38.8,41.9 28.8,41.9 31.2,35.8 36.2,35.8"/>
               <path fill={this.state.controls===0?"#E5E5E5":"#DF2230"} d="M36.4,41.3l-0.3-2c0-0.1,0.1-0.3,0.1-0.4c0,0,0,0,0,0h0c0,0,0.1,0,0.1-0.1v-0.4
                 c0,0,0-0.1-0.1-0.1h0c0,0,0,0,0,0c0-0.5-0.3-1-0.6-1.4c0,0,0,0,0,0l0,0c0,0,0-0.1,0-0.1l-0.2-0.3c0,0-0.1,0-0.1,0l0,0c0,0,0,0,0,0
@@ -62,11 +62,11 @@ class Drums extends Component {
                 c-0.1,0-0.2,0.1-0.2,0.2v0.3c0,0.1,0.1,0.2,0.2,0.2h0v1.2h-0.2c-0.1,0-0.1,0.1-0.1,0.1V41c-1-0.2-1.8-1.1-1.8-2.2
                 c0-0.6,0.2-1.2,0.6-1.7c0.4-0.5,1-0.7,1.6-0.8c0,0,0.1,0,0.1,0c1.2,0,2.2,1,2.2,2.2C36,39.7,35.2,40.8,34.2,41z"/>
           </g>
-          <g onMouseEnter={this.state.controls===1?"":(() => this.ControlHover(1))}
+          <g className={"control"+(this.state.controls===1?" active":"")}
+            onMouseEnter={this.state.controls===1?"":(() => this.ControlHover(1))}
             onMouseLeave={() => this.ControlHoverLeave()}
             onClick={() => this.SelectControl(1)}>
-      			<polygon className={"control"+(this.state.controls===1?" active":"")}
-              fill={this.state.controls===1?"#4C4C4C":(this.state.selector===1?"#4C4C4C":"#808080")}
+      			<polygon fill={this.state.controls===1?"#282828":(this.state.selector===1?"#282828":"#181818")}
               points="44.4,41.9 39.4,41.9 36.9,35.8 46.9,35.8"/>
       			<g fill={this.state.controls===1?"#E5E5E5":"#DF2230"}>
       				<path d="M41.9,41.6c0.1,0,0.2-0.1,0.3-0.2c0.3,0,0.6-0.1,0.9-0.3c0,0.1,0.1,0.2,0.1,0.4
@@ -105,11 +105,11 @@ class Drums extends Component {
       				c0.2-0.2,0.3-0.3,0.6-0.4c0,0,0.1-0.1,0-0.1C41.2,37.2,41.2,37.2,41.1,37.2z"/>
       		  </g>
           </g>
-          <g onMouseEnter={this.state.controls===2?"":(() => this.ControlHover(2))}
+          <g className={"control"+(this.state.controls===2?" active":"")}
+            onMouseEnter={this.state.controls===2?"":(() => this.ControlHover(2))}
             onMouseLeave={() => this.ControlHoverLeave()}
             onClick={() => this.SelectControl(2)}>
-            <polygon className={"control"+(this.state.controls===2?" active":"")}
-              fill={this.state.controls===2?"#4C4C4C":(this.state.selector===2?"#4C4C4C":"#808080")}
+            <polygon fill={this.state.controls===2?"#282828":(this.state.selector===2?"#282828":"#181818")}
               points="60.6,41.9 55.6,41.9 53.1,35.8 63.1,35.8"/>
             <g fill={this.state.controls===2?"#E5E5E5":"#DF2230"}>
               <path d="M56.1,39l0.9,0.3c0.2,0,0.3,0.1,0.4,0.3c0.2,0.2,0.4,0.4,0.7,0.4s0.6-0.1,0.7-0.4c0.1-0.1,0.2-0.2,0.4-0.3l0.9-0.3c-0.5,0-1.1,0.1-2,0.1S56.6,39,56.1,39z"/>
@@ -130,16 +130,16 @@ class Drums extends Component {
                   c0.1,0.1,0.2,0.2,0.3,0.2l2.1,0.6C61.4,38.5,61.5,38.6,61.5,38.7z"/>
             </g>
           </g>
-          <g onMouseEnter={this.state.controls===3?"":(() => this.ControlHover(3))}
+          <g className={"control"+(this.state.controls===3?" active":"")}
+            onMouseEnter={this.state.controls===3?"":(() => this.ControlHover(3))}
             onMouseLeave={() => this.ControlHoverLeave()}
             onClick={() => this.SelectControl(3)}>
-            <polygon className={"control"+(this.state.controls===3?" active":"")}
-              fill={this.state.controls===3?"#4C4C4C":(this.state.selector===3?"#4C4C4C":"#808080")}
+            <polygon fill={this.state.controls===3?"#282828":(this.state.selector===3?"#282828":"#181818")}
               points="55,41.9 45,41.9 47.5,35.8 52.5,35.8"/>
             <g fill={this.state.controls===3?"#E5E5E5":"#DF2230"}>
-              <path id="XMLID_102_" class="st3" d="M51.5,36.8c0.1,0.1,0.1,0.1,0.1,0.2c0,0,0,0,0.1,0c0.1-0.1,0-0.2-0.1-0.3c-0.1-0.1-0.3-0.1-0.4,0l0,0C51.3,36.7,51.4,36.7,51.5,36.8z"/>
-              <path id="XMLID_101_" class="st3" d="M49.9,37.6c0,0,0,0.1,0,0.2l0.9-0.9c0,0,0.1-0.1,0.1-0.1c0.1-0.1,0-0.2-0.1-0.3c-0.1-0.1-0.3-0.1-0.4,0l-0.8,0.9C49.8,37.4,49.9,37.4,49.9,37.6z"/>
-              <path id="XMLID_100_" class="st3" d="M47.8,39.7c0-0.5,0.2-0.9,0.5-1.3l1-1c0-0.1,0-0.2,0-0.3c0-0.1-0.1-0.1-0.2-0.2L48,38c-0.6,0.6-0.6,1.5-0.1,2.1C47.9,40,47.8,39.9,47.8,39.7z"/>
+              <path d="M51.5,36.8c0.1,0.1,0.1,0.1,0.1,0.2c0,0,0,0,0.1,0c0.1-0.1,0-0.2-0.1-0.3c-0.1-0.1-0.3-0.1-0.4,0l0,0C51.3,36.7,51.4,36.7,51.5,36.8z"/>
+              <path d="M49.9,37.6c0,0,0,0.1,0,0.2l0.9-0.9c0,0,0.1-0.1,0.1-0.1c0.1-0.1,0-0.2-0.1-0.3c-0.1-0.1-0.3-0.1-0.4,0l-0.8,0.9C49.8,37.4,49.9,37.4,49.9,37.6z"/>
+              <path d="M47.8,39.7c0-0.5,0.2-0.9,0.5-1.3l1-1c0-0.1,0-0.2,0-0.3c0-0.1-0.1-0.1-0.2-0.2L48,38c-0.6,0.6-0.6,1.5-0.1,2.1C47.9,40,47.8,39.9,47.8,39.7z"/>
               <path d="M48.5,38.6l1.1-1.2c0.1,0.1,0.1,0.1,0.2,0.2c0,0.1,0.1,0.3-0.1,0.4l-0.6,0.7c0,0,0,0.1,0,0.1
               c0,0,0.1,0,0.1,0l1.9-1.9c0.1-0.1,0.3-0.1,0.4,0c0.1,0.1,0.1,0.3,0,0.4l-1.3,1.4c0,0,0,0.1,0,0.1c0,0,0.1,0,0.1,0l1.5-1.6
               c0.1-0.1,0.3-0.1,0.4,0c0.1,0.1,0.1,0.3,0,0.4l-1.5,1.6c0,0,0,0.1,0,0.1c0,0,0.1,0,0.1,0l1.3-1.4c0.1-0.1,0.3-0.1,0.4,0
@@ -147,11 +147,11 @@ class Drums extends Component {
               c-0.6,0.6-1.7,0.7-2.3,0C47.9,40.2,47.8,39.2,48.5,38.6"/>
             </g>
           </g>
-          <g onMouseEnter={this.state.controls===4?"":(() => this.ControlHover(4))}
+          <g className={"control"+(this.state.controls===4?" active":"")}
+            onMouseEnter={this.state.controls===4?"":(() => this.ControlHover(4))}
             onMouseLeave={() => this.ControlHoverLeave()}
             onClick={() => this.SelectControl(4)}>
-      			<polygon className={"control"+(this.state.controls===4?" active":"")}
-              fill={this.state.controls===4?"#4C4C4C":(this.state.selector===4?"#4C4C4C":"#808080")}
+      			<polygon fill={this.state.controls===4?"#282828":(this.state.selector===4?"#282828":"#181818")}
               points="71.2,41.9 61.2,41.9 63.7,35.8 68.7,35.8"/>
       			<g fill={this.state.controls===4?"#E5E5E5":"#DF2230"}>
       				<path d="M67.9,40.6C67.9,40.6,67.9,40.6,67.9,40.6c0.1,0.1,0.1,0,0.1,0S68,40.5,67.9,40.6
@@ -196,35 +196,35 @@ class Drums extends Component {
           case 0:
           return (
             <path key={i+":"+j} className={"pad"+(hit?" active":"")} onClick={() => this.ChangePattern(i,j)}
-              stroke={current?"#181818":(selector?"#181818":"#808080")} fill={hit?(current?"#181818":(selector?"#181818":"#808080")):"#DF2230"} transform={"rotate("+(22.5 * j)+" 50 50)"}
+              stroke="#181818" fill={hit?"#181818":"#DF2230"} transform={"rotate("+(22.5 * j)+" 50 50)"}
               d="M54.2,24.4c-1.3-0.2-2.6-0.3-3.9-0.3c-0.1,0-0.1,0-0.2,0c-1.4,0-2.7,0.1-4.1,0.3l-0.8-4.2c1.6-0.3,3.3-0.4,4.9-0.4s3.3,0.1,4.9,0.4L54.2,24.4z"/>
           );
           break;
           case 1:
           return (
             <path key={i+":"+j} className={"pad"+(hit?" active":"")} onClick={() => this.ChangePattern(i,j)}
-              stroke={current?"#181818":(selector?"#181818":"#808080")} fill={hit?(current?"#181818":(selector?"#181818":"#808080")):"#DF2230"} transform={"rotate("+(22.5 * j)+" 50 50)"}
+              stroke="#181818" fill={hit?"#181818":"#DF2230"} transform={"rotate("+(22.5 * j)+" 50 50)"}
               d="M50.1,13.6c-2.1,0-4,0.2-6,0.6l0.8,4.2c1.8-0.3,3.4-0.5,5.2-0.5c0.1,0,3.6,0.2,5.3,0.5l0.8-4.2C54.3,13.8,50.2,13.6,50.1,13.6z"/>
           );
           break;
           case 2:
           return (
             <path key={i+":"+j} className={"pad"+(hit?" active":"")} onClick={() => this.ChangePattern(i,j)}
-              stroke={current?"#181818":(selector?"#181818":"#808080")} fill={hit?(current?"#181818":(selector?"#181818":"#808080")):"#DF2230"} transform={"rotate("+(22.5 * j)+" 50 50)"}
+              stroke="#181818" fill={hit?"#181818":"#DF2230"} transform={"rotate("+(22.5 * j)+" 50 50)"}
               d="M41.5,1.9l0.9,4.2c2.4-0.5,4.7-0.7,7.1-0.7V1.1C46.8,1.2,44.1,1.4,41.5,1.9z"/>
           );
           break;
           case 3:
           return (
             <path key={i+":"+j} className={"pad"+(hit?" active":"")} onClick={() => this.ChangePattern(i,j)}
-              stroke={current?"#181818":(selector?"#181818":"#808080")} fill={hit?(current?"#181818":(selector?"#181818":"#808080")):"#DF2230"} transform={"rotate("+(22.5 * j)+" 50 50)"}
+              stroke="#181818" fill={hit?"#181818":"#DF2230"} transform={"rotate("+(22.5 * j)+" 50 50)"}
               d="M58.5,1.9l-0.9,4.2c-2.4-0.5-5.1-0.7-7.1-0.7V1.1C53.5,1.2,55.9,1.4,58.5,1.9z"/>
           );
           break;
           case 4:
           return (
             <path key={i+":"+j} className={"pad"+(hit?" active":"")} onClick={() => this.ChangePattern(i,j)}
-              stroke={current?"#181818":(selector?"#181818":"#808080")} fill={hit?(current?"#181818":(selector?"#181818":"#808080")):"#DF2230"} transform={"rotate("+(22.5 * j)+" 50 50)"}
+              stroke="#181818" fill={hit?"#181818":"#DF2230"} transform={"rotate("+(22.5 * j)+" 50 50)"}
               d="M56.7,12.2c-2.1-0.4-4.3-0.6-6.4-0.6h-0.1c-2.2,0-4.4,0.2-6.5,0.6l-0.8-4.1c2.4-0.5,4.9-0.7,7.4-0.7c0.1,0,0.2,0,0.3,0c2.4,0,4.7,0.3,7,0.7L56.7,12.2z"/>
           );
           break;
