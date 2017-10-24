@@ -28,8 +28,3 @@
 {
   cursor: pointer;
 }
-
-#DrumsModule .control:hover
-{
-  fill: #4C4C4C;
-}
