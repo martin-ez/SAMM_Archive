@@ -12,6 +12,7 @@ class Bass extends Component {
 
   componentDidMount() {
     import Draggable from "gsap/Draggable";
+    var update = this.UpdatePattern.bind(this);
     for (var i = 0; i<this.handles.length; i++) {
       var top = i<8;
       var handle = this.handles[i];
@@ -21,9 +22,42 @@ class Bass extends Component {
         edgeResistance:1,
         lockAxis:true,
         throwProps:true,
-        bounds:bar
+        bounds:bar,
+        onDragEnd: function() {
+          var v = this.endY;
+          var x = 1-((v+12)/24);
+          if(x>=0.937) {
+            x = 1;
+          } else if (x<0.937 && x>=0.812) {
+            x = 0.875;
+          } else if (x<0.812 && x>=0.687) {
+            x = 0.75;
+          } else if (x<0.687 && x>=0.562) {
+            x = 0.625;
+          } else if (x<0.562 && x>=0.437) {
+            x = 0.5;
+          } else if (x<0.437 && x>=0.312) {
+            x = 0.375;
+          } else if (x<0.312 && x>=0.187) {
+            x = 0.25;
+          } else if (x<0.187 && x>=0.062) {
+            x = 0.125;
+          } else if (x<0.062) {
+            x = 0;
+          }
+          var pos = this.target.x.baseVal.value;
+          var top = (pos%10===7);
+          var handle = top?((pos+3)/10)-1:((pos-2)/10)+7;
+          update(x, handle);
+        }
       });
     }
+  }
+
+  UpdatePattern(value, index) {
+    var bass = this.props.pattern;
+    bass.pattern[index] = value;
+    this.props.update(bass);
   }
 
   render() {
@@ -75,6 +109,7 @@ class Bass extends Component {
     var pattern = this.props.pattern.pattern;
     return pattern.map((b, i) => {
       if(i<8) {
+        var pos = ((30*(1-b)));
         return (
           <g key={i} className={"slider"+(i===this.props.beat?" active":"")}>
             <rect className="selector" fill={i===this.props.beat?"rgba(229,229,299,0.75)":"none"}
@@ -82,8 +117,8 @@ class Bass extends Component {
             <rect fill="#181818" ref={(b) => {this.bars[i] = b}}
               x={((i+1)*10)-1} y="20" width="2" height="30"/>
           	<rect className="handle" stroke={b==='-'?"none":"#181818"} fill={b==='-'?"none":"#107AB3"}
-              ref={(h) => {this.handles[i] = h}} onMouseUp={() => this.ChangePattern(i)}
-              x={((i+1)*10)-3} y={b!=='-'?(30*(1-b)+19):"34"} width="6" height="2"/>
+              ref={(h) => {this.handles[i] = h}}
+              x={((i+1)*10)-3} y={pos} width="6" height="2"/>
             <circle className="toggle" stroke="#181818" fill={b==='-'?"#107AB3":"#181818"}
               onClick={() => this.ToggleBeat(i)}
               cx={(i+1)*10} cy="55" r="1.7"/>
@@ -91,6 +126,7 @@ class Bass extends Component {
         );
       } else {
         var j = i%8;
+        var pos = ((30*(1-b)));
         return (
           <g key={i} className={"slider"+(i===this.props.beat?" active":"")}>
             <rect className="selector" fill={i===this.props.beat?"rgba(229,229,299,0.75)":"none"}
@@ -98,8 +134,8 @@ class Bass extends Component {
             <rect fill="#181818" ref={(b) => {this.bars[i] = b}}
               x={((j+1)*10)+4} y="65" width="2" height="30"/>
             <rect className="handle" stroke={b==='-'?"none":"#181818"} fill={b==='-'?"none":"#107AB3"}
-              ref={(h) => {this.handles[i] = h}} onMouseUp={() => this.ChangePattern(i)}
-              x={((j+1)*10)+2} y={b!=='-'?(30*(1-b)+64):"79"} width="6" height="2"/>
+              ref={(h) => {this.handles[i] = h}}
+              x={((j+1)*10)+2} y={pos} width="6" height="2"/>
             <circle className="toggle" stroke="#181818" fill={b==='-'?"#107AB3":"#181818"}
               onClick={() => this.ToggleBeat(i)}
               cx={((j+1)*10)+5} cy="60" r="1.7"/>
@@ -113,10 +149,6 @@ class Bass extends Component {
     var bass = this.props.pattern;
     bass.pattern[i] = (bass.pattern[i]==='-'?0.5:'-');
     this.props.update(bass);
-  }
-
-  ChangePattern(i) {
-    var v = this.handles[i].transform.baseVal[0].matrix.f;
   }
 }
 
