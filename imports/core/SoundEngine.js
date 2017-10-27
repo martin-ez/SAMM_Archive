@@ -1,5 +1,5 @@
 let songInstance = null;
-import { MonoSynth } from 'synth-kit'
+import Soundfont from 'soundfont-player';
 import { Octavian, Note } from 'octavian';
 import SoundLoader from './SoundLoader.js';
 
@@ -14,27 +14,20 @@ export default class SoundEngine {
         sources: [],
         gains: [],
         masterGain: null,
-        analyser: null,
         ready: false
       };
       this.bass = {
+        synth: null,
         synths: [],
         gains: [],
         masterGain: null,
-        analyser: null,
-        analyserConnected: false,
         ready: false
       };
       this.bg = {
-        voices: [],
-        masterGain: null,
-        analyser: null,
+        piano: null,
         ready: false
       };
-      this.keys = {
-        analyser: null,
-        analyserConnected: false
-      };
+      this.keys = {};
       this.solo = {};
       this.ready = false;
       let soundLoader = new SoundLoader(this.context);
@@ -47,29 +40,17 @@ export default class SoundEngine {
   }
 
   LoadBassSynth() {
-    this.bass.masterGain = this.context.createGain();
-    for(var i = 0; i<2; i++) {
-      this.bass.synths[i] = MonoSynth(this.context);
-      this.bass.synths[i].oscillator.type = (i===0?"triangle":"square");
-      this.bass.gains[i] = this.context.createGain();
-      this.bass.gains[i].connect(this.bass.masterGain);
-      this.bass.synths[i].connect(this.bass.gains[i]);
-      if(i===1) this.bass.gains[i].gain.value = 0.25;
-    }
-    this.bass.masterGain.connect(this.context.destination);
-    this.bass.ready = true;
+    Soundfont.instrument(this.context, "lead_8_bass__lead").then(function (synth) {
+      this.bass.synth = synth;
+      this.bass.ready = true;
+    }.bind(this));
   }
 
   LoadBGSynth() {
-    this.bg.masterGain = this.context.createGain();
-    for(var i = 0; i<3; i++) {
-      this.bg.voices[i] = this.context.createOscillator();
-      this.bg.voices[i].type = "sine";
-      this.bg.voices[i].connect(this.bg.masterGain);
-      this.bg.voices[i].start(0);
-    }
-    this.bg.masterGain.connect(this.context.destination);
-    this.bg.masterGain.gain.value = 0;
+    Soundfont.instrument(this.context, this.song.backgroundSound).then(function (piano) {
+      this.bg.piano = piano;
+      this.bg.ready = true;
+    }.bind(this));
   }
 
   FinishedLoadingDrums(bufferList) {
@@ -93,22 +74,17 @@ export default class SoundEngine {
   }
 
   PlayBGSounds(bar) {
-    var s = (60*8) / (this.song.tempo);
-    var octave = 4;
-    var rootStr = this.song.key+octave;
-    var note = new Note(rootStr);
-    note = this.GetNoteBar(note, bar);
-    var freq = this.GetFrequenciesBar(note, bar);
-    for(var i = 0; i<3; i++) {
-      this.bg.voices[i].frequency.value = freq[i];
-    }
-    this.bg.masterGain.gain.value = 0.15;
-    this.bg.masterGain.gain.setTargetAtTime(0, this.context.currentTime, s);
-    if(!this.keys.analyserConnected && this.keys.analyser !== null) {
-      for(var i = 0; i<3; i++) {
-        this.bg.voices[i].connect(this.keys.analyser);
+    if(this.bg.ready) {
+      var s = (60*8) / (this.song.tempo);
+      var octave = 4;
+      var rootStr = this.song.key+octave;
+      var note = new Note(rootStr);
+      note = this.GetNoteBar(note, bar);
+      var freq = this.GetFrequenciesBar(note, bar);
+      var dur = (60*4)/this.song.tempo;
+      for(var i = 0; i<freq.length; i++) {
+        this.bg.piano.play(freq[i], this.context.currentTime, {duration: dur}, {soundfont: 'FluidR3_GM'});
       }
-      this.keys.analyserConnected = true;
     }
   }
 
@@ -124,28 +100,20 @@ export default class SoundEngine {
         g = i-1;
       }
       this.drums.sources[i].connect(this.drums.gains[g]);
-      if(this.drums.analyser) this.drums.sources[i].connect(this.drums.analyser);
       this.drums.sources[i].start(0);
     }
   }
 
   PlayBassSound(h, bar) {
-    var s = 60 / (this.song.tempo*8);
-    var octave = 2;
-    var rootStr = this.song.key+octave;
-    var note = new Note(rootStr);
-    note = this.GetNoteBar(note, bar);
-    note = this.GetNoteInterval(note, bar, h);
-    for(var i = 0; i<this.bass.synths.length; i++) {
-      this.bass.synths[i].trigger(note.frequency, this.context.currentTime);
-      this.bass.gains[i].gain.value = (i===1?0.5:1);
-      this.bass.gains[i].gain.setTargetAtTime(0, this.context.currentTime, s);
-    }
-    if(!this.bass.analyserConnected && this.bass.analyser !== null) {
-      for(var i = 0; i<this.bass.synths.length; i++) {
-        this.bass.synths[i].oscillator.connect(this.bass.analyser);
-      }
-      this.bass.analyserConnected = true;
+    if(this.bass.ready) {
+      var s = 60 / (this.song.tempo*8);
+      var octave = 3;
+      var rootStr = this.song.key+octave;
+      var note = new Note(rootStr);
+      note = this.GetNoteBar(note, bar);
+      note = this.GetNoteInterval(note, bar, h);
+      var noteName = note.letter+(note.modifier?"#":"")+note.octave;
+      this.bass.synth.play(noteName, this.context.currentTime, {duration: s}, {gain: 3, soundfont: 'FluidR3_GM'});
     }
   }
 
@@ -189,16 +157,15 @@ export default class SoundEngine {
 
   GetFrequenciesBar(note, bar) {
     var freq = [];
-    freq.push(note.frequency);
+    freq.push(note.letter+(note.modifier?"#":"")+"4");
     var note2 = note.minorThird();
     if(this.song.progression[bar] > 0) {
       var note2 = note.majorThird();
     }
-    note2 = new Note(note2.letter+(note2.modifier?"#":"")+"4");
-    freq.push(note2.frequency);
+    freq.push(note2.letter+(note2.modifier?"#":"")+"4");
     note2 = note.perfectFifth();
-    note2 = new Note(note2.letter+(note2.modifier?"#":"")+"4");
-    freq.push(note2.frequency);
+    freq.push(note2.letter+(note2.modifier?"#":"")+"4");
+    freq.push(note.letter+(note.modifier?"#":"")+"3");
     return freq;
   }
 

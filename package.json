@@ -17,6 +17,6 @@
     "react-dom": "^15.6.2",
     "react-responsive": "^2.0.0",
     "react-transition-group-plus": "^0.5.2",
-    "synth-kit": "0.0.2"
+    "soundfont-player": "^0.10.6"
   }
 }

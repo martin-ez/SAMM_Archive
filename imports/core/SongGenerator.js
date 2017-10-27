@@ -8,6 +8,7 @@ SongGenerator.prototype.CreateNewSong = function() {
     minor: false,
     progression: [],
     progressionName: [],
+    backgroundSound: "",
     band: "",
     drums: {
       user: "",
@@ -39,6 +40,7 @@ SongGenerator.prototype.CreateNewSong = function() {
   newSong.progression = this.CreateProgression();
   newSong.minor = newSong.progression[0] < 0;
   newSong.progressionName = this.ConvertProgression(newSong.progression, newSong.key, newSong.minor);
+  newSong.backgroundSound = this.RandomBGSound();
   newSong.band = this.CreateBandName();
   return newSong;
 }
@@ -131,6 +133,16 @@ SongGenerator.prototype.CreateBandName = function() {
   var animals = require('animals');
   var a = animals();
   return "The " +colors[Math.floor(Math.random() * colors.length)] +" "+a.charAt(0).toUpperCase() + a.slice(1)+"s";
+}
+
+SongGenerator.prototype.RandomBGSound = function() {
+  var sounds =
+  ["pad_1_new_age","pad_2_warm","pad_3_polysynth","pad_4_choir","pad_5_bowed",
+  "pad_6_metallic","pad_7_halo","synth_brass_1","synth_brass_2",
+  "synth_choir","voice_oohs","reed_organ","brass_section","church_organ",
+  "accordion","acoustic_guitar_nylon","acoustic_guitar_steel",
+  "acoustic_grand_piano"];
+  return sounds[Math.floor(Math.random() * sounds.length)];
 }
 
 export default SongGenerator;
