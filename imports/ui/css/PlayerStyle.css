@@ -59,20 +59,32 @@
   display: grid;
   grid-template-rows: 1fr 1fr;
   grid-gap: 1vw;
+  text-align: center;
+}
+
+#Player button
+{
+  position: relative;
+  top: 0;
+  background-color: #E5E5E5;
+  border-top: 3px solid #808080;
+  cursor: pointer;
 }
 
 #Player button h2
 {
   font-size: 2vh;
-}
-
-#Player .saveButton:not(.inactive)
-{
-  
+  width: 100%;
+  text-align: center;
 }
 
 #Player .saveButton.inactive
 {
   background-color: transparent;
   border: 1px solid #181818;
+}
+
+#Player .saveButton:not(.inactive)
+{
+
 }

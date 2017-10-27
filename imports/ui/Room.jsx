@@ -130,7 +130,9 @@ class Room extends Component {
       <Player
         bar={this.state.bar}
         song={this.props.song}
-        save={this.props.user!=="Guest"}/>
+        save={this.props.user!=="Guest"}
+        pause={() => this.PauseSong()}
+        playing={this.state.playing}/>
     );
   }
 
@@ -138,6 +140,13 @@ class Room extends Component {
     var song = this.props.song;
     song[instrument] = pattern;
     this.props.update(song);
+  }
+
+  PauseSong() {
+    var p = !this.state.playing;
+    this.setState({
+      playing: p
+    })
   }
 }
 
