@@ -109,7 +109,6 @@ class Bass extends Component {
     var pattern = this.props.pattern.pattern;
     return pattern.map((b, i) => {
       if(i<8) {
-        var pos = ((30*(1-b)));
         return (
           <g key={i} className={"slider"+(i===this.props.beat?" active":"")}>
             <rect className="selector" fill={i===this.props.beat?"rgba(229,229,299,0.75)":"none"}
@@ -118,7 +117,7 @@ class Bass extends Component {
               x={((i+1)*10)-1} y="20" width="2" height="30"/>
           	<rect className="handle" stroke={b==='-'?"none":"#181818"} fill={b==='-'?"none":"#107AB3"}
               ref={(h) => {this.handles[i] = h}}
-              x={((i+1)*10)-3} y={pos} width="6" height="2"/>
+              x={((i+1)*10)-3} y="34" width="6" height="2"/>
             <circle className="toggle" stroke="#181818" fill={b==='-'?"#107AB3":"#181818"}
               onClick={() => this.ToggleBeat(i)}
               cx={(i+1)*10} cy="55" r="1.7"/>
@@ -126,7 +125,6 @@ class Bass extends Component {
         );
       } else {
         var j = i%8;
-        var pos = ((30*(1-b)));
         return (
           <g key={i} className={"slider"+(i===this.props.beat?" active":"")}>
             <rect className="selector" fill={i===this.props.beat?"rgba(229,229,299,0.75)":"none"}
@@ -135,7 +133,7 @@ class Bass extends Component {
               x={((j+1)*10)+4} y="65" width="2" height="30"/>
             <rect className="handle" stroke={b==='-'?"none":"#181818"} fill={b==='-'?"none":"#107AB3"}
               ref={(h) => {this.handles[i] = h}}
-              x={((j+1)*10)+2} y={pos} width="6" height="2"/>
+              x={((j+1)*10)+2} y="79" width="6" height="2"/>
             <circle className="toggle" stroke="#181818" fill={b==='-'?"#107AB3":"#181818"}
               onClick={() => this.ToggleBeat(i)}
               cx={((j+1)*10)+5} cy="60" r="1.7"/>

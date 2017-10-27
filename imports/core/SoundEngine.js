@@ -206,12 +206,13 @@ export default class SoundEngine {
     if(interval === 0.5) {
       return note;
     }
+    var minor = this.song.progression[bar] < 0;
     switch(interval) {
       case 0:
       note = note.downOctave();
       break;
       case 0.125:
-      if(!this.song.minor) {
+      if(!minor) {
         note = note.majorThird().downOctave();
       } else {
         note = note.minorThird().downOctave();
@@ -222,14 +223,14 @@ export default class SoundEngine {
       note = note.perfectFifth().downOctave();
       break;
       case 0.375:
-      if(!this.song.minor) {
+      if(!minor) {
         note = note.majorSixth().downOctave();
       } else {
         note = note.minorSeventh().downOctave();
       }
       break;
       case 0.625:
-      if(!this.song.minor) {
+      if(!minor) {
         note = note.majorThird();
       } else {
         note = note.minorThird();
@@ -239,7 +240,7 @@ export default class SoundEngine {
       note = note.perfectFifth();
       break;
       case 0.875:
-      if(!this.song.minor) {
+      if(!minor) {
         note = note.majorSixth();
       } else {
         note = note.minorSeventh();
