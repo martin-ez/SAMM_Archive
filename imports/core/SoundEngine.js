@@ -39,6 +39,7 @@ export default class SoundEngine {
   LoadBassSynth() {
     Soundfont.instrument(this.context, "lead_8_bass__lead").then(function (synth) {
       this.bass.synth = synth;
+      this.bass.synth.out.gain.value = 3;
       this.bass.ready = true;
     }.bind(this));
   }
@@ -46,6 +47,7 @@ export default class SoundEngine {
   LoadBGSynth() {
     Soundfont.instrument(this.context, this.song.backgroundSound).then(function (piano) {
       this.bg.piano = piano;
+      this.bg.piano.out.gain.value = 1.2;
       this.bg.ready = true;
     }.bind(this));
   }
@@ -57,6 +59,7 @@ export default class SoundEngine {
     }
     this.drums.masterGain = this.context.createGain();
     this.drums.masterGain.connect(this.context.destination);
+    this.drums.masterGain.gain.value = 0.6;
     for (var i = 0; i < 4; i++) {
       this.drums.gains[i] = this.context.createGain();
       this.drums.gains[i].connect(this.drums.masterGain);
@@ -110,7 +113,7 @@ export default class SoundEngine {
       note = this.GetNoteBar(note, bar);
       note = this.GetNoteInterval(note, bar, h);
       var noteName = note.letter+(note.modifier?"#":"")+note.octave;
-      this.bass.synth.play(noteName, this.context.currentTime, {duration: s}, {gain: 3, soundfont: 'FluidR3_GM'});
+      this.bass.synth.play(noteName, this.context.currentTime, {duration: s}, {soundfont: 'FluidR3_GM'});
     }
   }
 

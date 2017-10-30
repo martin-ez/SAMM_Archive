@@ -18,12 +18,15 @@ class App extends Component {
     super(props);
     this.Login = this.Login.bind(this);
     this.Logout = this.Logout.bind(this);
+    this.UserLeaving = this.UserLeaving.bind(this);
+    window.addEventListener('beforeunload', this.UserLeaving);
     this.state = {
       view: "home",
       sessionSong: null,
       list: [],
       user: null,
-      userStats: null
+      userStats: null,
+      instrumentPlayed: null
     }
   }
 
@@ -102,7 +105,8 @@ class App extends Component {
         song={this.state.sessionSong.song}
         user={this.state.user?this.state.user.displayName.split(" ")[0]:"Guest"}
         update={(s) => this.UpdateSessionSong(s)}
-        saveSong={() => this.SaveSong()}/>
+        saveSong={() => this.SaveSong()}
+        instrument={(instr) => this.SetInstrument(instr)}/>
       );
     }
   }
@@ -158,6 +162,12 @@ class App extends Component {
     } else {
       this.setState({view: newView});
     }
+  }
+
+  SetInstrument(instr) {
+    this.setState({
+      instrumentPlayed: instr
+    });
   }
 
   UpdateSessionSong(song) {
@@ -217,6 +227,21 @@ class App extends Component {
         user: null,
         userStats: null
       });
+    });
+  }
+
+  UserLeaving() {
+    var id = this.state.sessionSong._id;
+    var instrument = this.state.instrumentPlayed;
+    Meteor.call('session.deleteUser', {
+      id,
+      instrument
+    }, (error, response) => {
+      if (error) {
+        console.log(error);
+      } else {
+        console.log('User remove from session');
+      }
     });
   }
 }

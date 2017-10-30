@@ -29,7 +29,19 @@ Meteor.methods({
       $set: {noUsers:users}
     });
   },
-  'session.deleteSong'({id}){
-    return SessionDB.remove(id);
+  'session.deleteUser'({id, instrument}){
+    var s = SessionDB.findOne(id);
+    var users = s.noUsers-1;
+    var song = s.song;
+    if(instrument !== null) {
+      song[instrument].user = "";
+    }
+    if(users<=0) {
+      return SessionDB.remove(id);
+    } else {
+      return SessionDB.update(id,{
+        $set: {song:song, noUsers:users}
+      });
+    }
   }
 });

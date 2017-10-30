@@ -64,6 +64,7 @@ class Room extends Component {
   SelectInstrument(instrument) {
     var song = this.props.song;
     song[instrument].user = this.props.user;
+    this.props.instrument(instrument);
     this.props.update(song);
     this.setState({
       view: "Instrument",
@@ -155,7 +156,8 @@ Room.propTypes = {
   song: PropTypes.object.isRequired,
   user: PropTypes.string.isRequired,
   update: PropTypes.func.isRequired,
-  saveSong: PropTypes.func.isRequired
+  saveSong: PropTypes.func.isRequired,
+  instrument: PropTypes.func.isRequired
 }
 
 export default Room;
