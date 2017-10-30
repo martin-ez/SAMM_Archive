@@ -18,9 +18,6 @@ export default class SoundEngine {
       };
       this.bass = {
         synth: null,
-        synths: [],
-        gains: [],
-        masterGain: null,
         ready: false
       };
       this.bg = {

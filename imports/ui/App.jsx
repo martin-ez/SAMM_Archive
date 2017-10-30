@@ -20,10 +20,18 @@ class App extends Component {
     this.Logout = this.Logout.bind(this);
     this.state = {
       view: "home",
-      song: this.props.currentSong,
+      sessionSong: null,
+      list: [],
       user: null,
       userStats: null
     }
+  }
+
+  componentWillReceiveProps(nextProps) {
+    this.setState({
+      sessionSong: nextProps.currentSong,
+      list: nextProps.songs
+    });
   }
 
   componentDidMount() {
@@ -91,7 +99,7 @@ class App extends Component {
       return (
         <Room
         session={true}
-        song={this.state.song.song}
+        song={this.state.sessionSong.song}
         user={this.state.user?this.state.user.displayName.split(" ")[0]:"Guest"}
         update={(s) => this.UpdateSessionSong(s)}
         saveSong={() => this.SaveSong()}/>
@@ -100,12 +108,12 @@ class App extends Component {
   }
 
   UpdateView(newView) {
-    if(newView==='room' && this.state.song===null) {
+    if(newView==='room' && this.state.sessionSong===null) {
       var end = false;
-      if (this.props.songs.length !== 0) {
-        for (var i = 0; i < this.props.songs.length && !end; i++) {
-          if (this.props.songs[i].noUsers < 2) {
-            var id = this.props.songs[i]._id;
+      if (this.state.list !== 0) {
+        for (var i = 0; i < this.state.list.length && !end; i++) {
+          if (this.state.list[i].noUsers < 2) {
+            var id = this.state.list[i]._id;
             Meteor.call('session.addUser',{
               id
             }, (error, response) =>{
@@ -153,7 +161,7 @@ class App extends Component {
   }
 
   UpdateSessionSong(song) {
-    var id = this.state.song._id;
+    var id = this.state.sessionSong._id;
     Meteor.call('session.updateSong', {
       id,
       song
@@ -171,7 +179,7 @@ class App extends Component {
   }
 
   SaveSong() {
-    var song = this.state.song.song;
+    var song = this.state.sessionSong.song;
     var owner = Meteor.userId();
     Meteor.call('saved.addSong', {
       song,
@@ -222,9 +230,10 @@ export default createContainer(() => {
   Meteor.subscribe('session');
   var current = Session.get('currentSong');
   if (current === undefined || current === null) {
+    var songsInSession = SessionDB.find({}).fetch();
     return {
       currentSong: null,
-      songs: SessionDB.find({}).fetch()
+      songs: songsInSession
     };
   } else {
     var s = SessionDB.findOne(current);
