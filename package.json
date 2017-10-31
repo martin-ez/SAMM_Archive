@@ -18,5 +18,8 @@
     "react-responsive": "^2.0.0",
     "react-transition-group-plus": "^0.5.2",
     "soundfont-player": "^0.10.6"
+  },
+  "devDependencies": {
+    "faker": "^4.1.0"
   }
 }
