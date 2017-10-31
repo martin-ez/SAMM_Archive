@@ -25,30 +25,34 @@ export default class SoundEngine {
         ready: false
       };
       this.keys = {};
-      this.solo = {};
+      this.solo = {
+        synth: null,
+        ready: false
+      };
       this.ready = false;
-      let soundLoader = new SoundLoader(this.context);
-      soundLoader.loadDrumsBuffer((b) => this.FinishedLoadingDrums(b));
-      this.LoadBassSynth();
-      this.LoadBGSynth();
     }
+    let soundLoader = new SoundLoader(this.context);
+    soundLoader.loadDrumsBuffer((b) => this.FinishedLoadingDrums(b));
+    this.LoadSynths();
     this.song = newSong;
     return songInstance;
   }
 
-  LoadBassSynth() {
+  LoadSynths() {
+    Soundfont.instrument(this.context, this.song.backgroundSound).then(function (piano) {
+      this.bg.piano = piano;
+      this.bg.piano.out.gain.value = 1.2;
+      this.bg.ready = true;
+    }.bind(this));
     Soundfont.instrument(this.context, "lead_8_bass__lead").then(function (synth) {
       this.bass.synth = synth;
       this.bass.synth.out.gain.value = 3;
       this.bass.ready = true;
     }.bind(this));
-  }
-
-  LoadBGSynth() {
-    Soundfont.instrument(this.context, this.song.backgroundSound).then(function (piano) {
-      this.bg.piano = piano;
-      this.bg.piano.out.gain.value = 1.2;
-      this.bg.ready = true;
+    Soundfont.instrument(this.context, "alto_sax").then(function (synth) {
+      this.solo.synth = synth;
+      this.solo.synth.out.gain.value = 3;
+      this.solo.ready = true;
     }.bind(this));
   }
 
@@ -114,6 +118,21 @@ export default class SoundEngine {
       note = this.GetNoteInterval(note, bar, h);
       var noteName = note.letter+(note.modifier?"#":"")+note.octave;
       this.bass.synth.play(noteName, this.context.currentTime, {duration: s}, {soundfont: 'FluidR3_GM'});
+    }
+  }
+
+  PlaySoloSound(h) {
+    if(this.solo.ready) {
+      if(h==='-') {
+        this.solo.synth.stop();
+      } else {
+        var octave = 3;
+        var rootStr = this.song.key+octave;
+        var note = new Note(rootStr);
+        note = this.GetPentatonicNote(note, h);
+        var noteName = note.letter+(note.modifier?"#":"")+note.octave;
+        this.solo.synth.play(noteName);
+      }
     }
   }
 
@@ -218,5 +237,63 @@ export default class SoundEngine {
       break;
     }
     return note;
+  }
+
+  GetPentatonicNote(note, h) {
+    var pitch = (9-h);
+    var noteToPlay = note;
+    switch (pitch) {
+      case 0:
+        noteToPlay = note;
+        break;
+      case 1:
+        if(!this.song.minor) {
+          noteToPlay = note.majorSecond();
+        } else {
+          noteToPlay = note.minorThird();
+        }
+        break;
+      case 2:
+        if(!this.song.minor) {
+          noteToPlay = note.majorThird();
+        } else {
+          noteToPlay = note.perfectFourth();
+        }
+        break;
+      case 3:
+        noteToPlay = note.perfectFifth();
+        break;
+      case 4:
+        if(!this.song.minor) {
+          noteToPlay = note.majorSixth();
+        } else {
+          noteToPlay = note.minorSeventh();
+        }
+        break;
+      case 5:
+        noteToPlay = note.perfectOctave();
+        break;
+      case 6:
+        if(!this.song.minor) {
+          noteToPlay = note.perfectOctave().majorSecond();
+        } else {
+          noteToPlay = note.perfectOctave().minorThird();
+        }
+        break;
+      case 7:
+        if(!this.song.minor) {
+          noteToPlay = note.perfectOctave().majorThird();
+        } else {
+          noteToPlay = note.perfectOctave().perfectFourth();
+        }
+        break;
+      case 8:
+        noteToPlay = note.perfectOctave().perfectFifth();
+        break;
+      case 9:
+        noteToPlay = note.perfectOctave().perfectOctave();
+        break;
+    }
+    return noteToPlay;
   }
 }

@@ -7,6 +7,7 @@ import InstrumentSelect from './InstrumentSelect.jsx';
 import Player from './Player.jsx';
 import Drums from './Drums.jsx';
 import Bass from './Bass.jsx';
+import Solo from './Solo.jsx';
 
 import './css/RoomStyle.css';
 
@@ -56,7 +57,12 @@ class Room extends Component {
     }
     if (this.props.song.bass.user !== "") {
       if (this.props.song.bass.pattern[currentBeat] !== '-') {
-        this.state.engine.PlayBassSound(this.props.song.bass.pattern[currentBeat], currentBar, this.props.song.bass.sound);
+        this.state.engine.PlayBassSound(this.props.song.bass.pattern[currentBeat], currentBar);
+      }
+    }
+    if (this.props.song.solo.user !== "") {
+      if (currentBeat%2 === 0) {
+        this.state.engine.PlaySoloSound(this.props.song.solo.pattern[currentBar][currentBeat/2]);
       }
     }
   }
@@ -122,6 +128,12 @@ class Room extends Component {
       case "keys":
       break;
       case "solo":
+      return (
+        <Solo
+          pattern={this.props.song.solo}
+          beat={this.state.beat}
+          update={(p) => this.UpdatePattern(p, "solo")}/>
+      );
       break;
     }
   }

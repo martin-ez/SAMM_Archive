@@ -116,7 +116,7 @@ class App extends Component {
       var end = false;
       if (this.state.list !== 0) {
         for (var i = 0; i < this.state.list.length && !end; i++) {
-          if (this.state.list[i].noUsers < 2) {
+          if (this.state.list[i].noUsers < 3) {
             var id = this.state.list[i]._id;
             Meteor.call('session.addUser',{
               id
@@ -128,7 +128,7 @@ class App extends Component {
                 Session.set('currentSong', id);
                 var s = SessionDB.findOne(id);
                 this.setState({
-                  song: s,
+                  sessionSong: s,
                   view: newView
                 });
               }
@@ -153,7 +153,7 @@ class App extends Component {
             Session.set('currentSong', response);
             var s = SessionDB.findOne(response);
             this.setState({
-              song: s,
+              sessionSong: s,
               view: newView
             });
           }
@@ -231,18 +231,20 @@ class App extends Component {
   }
 
   UserLeaving() {
-    var id = this.state.sessionSong._id;
-    var instrument = this.state.instrumentPlayed;
-    Meteor.call('session.deleteUser', {
-      id,
-      instrument
-    }, (error, response) => {
-      if (error) {
-        console.log(error);
-      } else {
-        console.log('User remove from session');
-      }
-    });
+    if(this.state.sessionSong !== null) {
+      var id = this.state.sessionSong._id;
+      var instrument = this.state.instrumentPlayed;
+      Meteor.call('session.deleteUser', {
+        id,
+        instrument
+      }, (error, response) => {
+        if (error) {
+          console.log(error);
+        } else {
+          console.log('User remove from session');
+        }
+      });
+    }      
   }
 }
 
